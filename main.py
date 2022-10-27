@@ -36,3 +36,8 @@ def calculate():
 def login():
     user = request.form['nm'];
     return user
+
+@app.route('/test_json',methods = ['POST'])
+def login():
+    content = request.json
+    return (content['param1'] + content['param2'])
