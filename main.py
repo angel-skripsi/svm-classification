@@ -38,6 +38,6 @@ def login():
     return user
 
 @app.route('/test_json',methods = ['POST'])
-def login():
+def test_json():
     content = request.json
     return (content['param1'] + content['param2'])
