@@ -4,6 +4,7 @@ from flask import request
 from flask import render_template
 from flask_mysqldb import MySQL
 from TestHello import my_function
+
 app = Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'us-cdbr-east-06.cleardb.net'
