@@ -7,12 +7,12 @@ from TestHello import my_function
 
 app = Flask(__name__)
 
-app.config['MYSQL_HOST'] = 'us-cdbr-east-06.cleardb.net'
-app.config['MYSQL_USER'] = 'b539dadf046091'
-app.config['MYSQL_PASSWORD'] = '5b842ab0'
-app.config['MYSQL_DB'] = 'heroku_97dccdc5801db01'
+# app.config['MYSQL_HOST'] = 'us-cdbr-east-06.cleardb.net'
+# app.config['MYSQL_USER'] = 'b539dadf046091'
+# app.config['MYSQL_PASSWORD'] = '5b842ab0'
+# app.config['MYSQL_DB'] = 'heroku_97dccdc5801db01'
 
-mysql = MySQL(app)
+# mysql = MySQL(app)
 
 @app.route('/login')
 def index():
@@ -51,16 +51,16 @@ def test_json():
     content = request.json
     return (content['param1'] + content['param2'])
 
-@app.route("/selectdb/")
-def selectdb():
-    cursor = mysql.connection.cursor()
-    cursor.execute("SELECT * FROM test")
-    rv = cursor.fetchall()
-    cursor.close()
-    payload = []
-    content = {}
-    for result in rv:
-       content = {'id': result[0], 'name': result[1], 'email': result[2], 'phone': result[3], 'birthdate': result[4]}
-       payload.append(content)
-       content = {}
-    return jsonify(payload)
+# @app.route("/selectdb/")
+# def selectdb():
+#     cursor = mysql.connection.cursor()
+#     cursor.execute("SELECT * FROM test")
+#     rv = cursor.fetchall()
+#     cursor.close()
+#     payload = []
+#     content = {}
+#     for result in rv:
+#        content = {'id': result[0], 'name': result[1], 'email': result[2], 'phone': result[3], 'birthdate': result[4]}
+#        payload.append(content)
+#        content = {}
+#     return jsonify(payload)
