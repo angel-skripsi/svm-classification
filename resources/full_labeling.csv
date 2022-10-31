@@ -1,0 +1,365 @@
+Wilayah;Kecamatan;Tahun;Label
+Depok;Beji;2014;Kering
+Depok;Bojongsari;2014;Kering
+Depok;Cilodong;2014;Kering
+Depok;Cimanggis;2014;Kering
+Depok;Cinere;2014;Kering
+Depok;Cipayung;2014;Kering
+Depok;Limo;2014;Kering
+Depok;PancoranMas;2014;Kering
+Depok;Sawangan;2014;Kering
+Depok;Sukmajaya;2014;Kering
+Depok;Tapos;2014;Kering
+Bogor;kec_Babakan_Madang;2014;Hijau
+Bogor;kec_BojongGede;2014;Setengah Hijau
+Bogor;kec_Caringin;2014;Hijau
+Bogor;kec_Cariu;2014;Hijau
+Bogor;kec_Ciampea;2014;Hijau
+Bogor;kec_Ciawi;2014;Setengah Hijau
+Bogor;kec_Cibinong;2014;Setengah Hijau
+Bogor;kec_Cibungbulang;2014;Hijau
+Bogor;kec_Cigombong;2014;Hijau
+Bogor;kec_Cigudeg;2014;Hijau
+Bogor;kec_Cijeruk;2014;Hijau
+Bogor;kec_Cileungsi;2014;Hijau
+Bogor;kec_Ciomas;2014;Hijau
+Bogor;kec_Cisarua;2014;Hijau
+Bogor;kec_Ciseng;2014;Hijau
+Bogor;kec_Citeureup;2014;Hijau
+Bogor;kec_Dramaga;2014;Hijau
+Bogor;kec_Gunungputri;2014;Setengah Hijau
+Bogor;kec_Gunungsindur;2014;Hijau
+Bogor;kec_Jasinga;2014;Hijau
+Bogor;kec_Jonggol;2014;Hijau
+Bogor;kec_Kemang;2014;Hijau
+Bogor;kec_Klapanunggal;2014;Hijau
+Bogor;kec_Leuwiliang;2014;Hijau
+Bogor;kec_Leuwisadeng;2014;Hijau
+Bogor;kec_Megamendung;2014;Hijau
+Bogor;kec_Nanggung;2014;Hijau
+Bogor;kec_Pamijahan;2014;Hijau
+Bogor;kec_Parung;2014;Hijau
+Bogor;kec_Parung_Panjang;2014;Setengah Hijau
+Bogor;kec_Rancabungur;2014;Hijau
+Bogor;kec_Rumpin;2014;Hijau
+Bogor;kec_Sukajaya;2014;Hijau
+Bogor;kec_Sukamakmur;2014;Hijau
+Bogor;kec_Sukaraja;2014;Hijau
+Bogor;kec_Tajurhalang;2014;Hijau
+Bogor;kec_Tamansari;2014;Hijau
+Bogor;kec_Tanjungsari;2014;Hijau
+Bogor;kec_Tenjo;2014;Hijau
+Bogor;kec_Tenjolaya;2014;Hijau
+Bogor;kota_bogor;2014;Hijau
+Depok;Beji;2015;Kering
+Depok;Bojongsari;2015;Kering
+Depok;Cilodong;2015;Kering
+Depok;Cimanggis;2015;Kering
+Depok;Cinere;2015;Kering
+Depok;Cipayung;2015;Kering
+Depok;Limo;2015;Kering
+Depok;PancoranMas;2015;Kering
+Depok;Sawangan;2015;Kering
+Depok;Sukmajaya;2015;Kering
+Depok;Tapos;2015;Kering
+Bogor;kec_Babakan_Madang;2015;Hijau
+Bogor;kec_BojongGede;2015;Setengah Hijau
+Bogor;kec_Caringin;2015;Hijau
+Bogor;kec_Cariu;2015;Hijau
+Bogor;kec_Ciampea;2015;Hijau
+Bogor;kec_Ciawi;2015;Hijau
+Bogor;kec_Cibinong;2015;Setengah Hijau
+Bogor;kec_Cibungbulang;2015;Hijau
+Bogor;kec_Cigombong;2015;Hijau
+Bogor;kec_Cigudeg;2015;Hijau
+Bogor;kec_Cijeruk;2015;Hijau
+Bogor;kec_Cileungsi;2015;Setengah Hijau
+Bogor;kec_Ciomas;2015;Setengah Hijau
+Bogor;kec_Cisarua;2015;Hijau
+Bogor;kec_Ciseng;2015;Hijau
+Bogor;kec_Citeureup;2015;Setengah Hijau
+Bogor;kec_Dramaga;2015;Hijau
+Bogor;kec_Gunungputri;2015;Setengah Hijau
+Bogor;kec_Gunungsindur;2015;Setengah Hijau
+Bogor;kec_Jasinga;2015;Hijau
+Bogor;kec_Jonggol;2015;Hijau
+Bogor;kec_Kemang;2015;Hijau
+Bogor;kec_Klapanunggal;2015;Hijau
+Bogor;kec_Leuwiliang;2015;Hijau
+Bogor;kec_Leuwisadeng;2015;Hijau
+Bogor;kec_Megamendung;2015;Setengah Hijau
+Bogor;kec_Nanggung;2015;Hijau
+Bogor;kec_Pamijahan;2015;Hijau
+Bogor;kec_Parung;2015;Hijau
+Bogor;kec_Parung_Panjang;2015;Hijau
+Bogor;kec_Rancabungur;2015;Hijau
+Bogor;kec_Rumpin;2015;Hijau
+Bogor;kec_Sukajaya;2015;Hijau
+Bogor;kec_Sukamakmur;2015;Hijau
+Bogor;kec_Sukaraja;2015;Setengah Hijau
+Bogor;kec_Tajurhalang;2015;Setengah Hijau
+Bogor;kec_Tamansari;2015;Hijau
+Bogor;kec_Tanjungsari;2015;Hijau
+Bogor;kec_Tenjo;2015;Hijau
+Bogor;kec_Tenjolaya;2015;Hijau
+Bogor;kota_bogor;2015;Setengah Hijau
+Depok;Beji;2016;Kering
+Depok;Bojongsari;2016;Kering
+Depok;Cilodong;2016;Kering
+Depok;Cimanggis;2016;Kering
+Depok;Cinere;2016;Kering
+Depok;Cipayung;2016;Kering
+Depok;Limo;2016;Kering
+Depok;PancoranMas;2016;Kering
+Depok;Sawangan;2016;Kering
+Depok;Sukmajaya;2016;Kering
+Depok;Tapos;2016;Kering
+Bogor;kec_Babakan_Madang;2016;Kering
+Bogor;kec_BojongGede;2016;Kering
+Bogor;kec_Caringin;2016;Setengah Hijau
+Bogor;kec_Cariu;2016;Kering
+Bogor;kec_Ciampea;2016;Kering
+Bogor;kec_Ciawi;2016;Hijau
+Bogor;kec_Cibinong;2016;Kering
+Bogor;kec_Cibungbulang;2016;Kering
+Bogor;kec_Cigombong;2016;Kering
+Bogor;kec_Cigudeg;2016;Hijau
+Bogor;kec_Cijeruk;2016;Hijau
+Bogor;kec_Cileungsi;2016;Kering
+Bogor;kec_Ciomas;2016;Kering
+Bogor;kec_Cisarua;2016;Hijau
+Bogor;kec_Ciseng;2016;Kering
+Bogor;kec_Citeureup;2016;Kering
+Bogor;kec_Dramaga;2016;Kering
+Bogor;kec_Gunungputri;2016;Kering
+Bogor;kec_Gunungsindur;2016;Kering
+Bogor;kec_Jasinga;2016;Hijau
+Bogor;kec_Jonggol;2016;Kering
+Bogor;kec_Kemang;2016;Kering
+Bogor;kec_Klapanunggal;2016;Hijau
+Bogor;kec_Leuwiliang;2016;Hijau
+Bogor;kec_Leuwisadeng;2016;Kering
+Bogor;kec_Megamendung;2016;Hijau
+Bogor;kec_Nanggung;2016;Hijau
+Bogor;kec_Pamijahan;2016;Hijau
+Bogor;kec_Parung;2016;Kering
+Bogor;kec_Parung_Panjang;2016;Setengah Hijau
+Bogor;kec_Rancabungur;2016;Kering
+Bogor;kec_Rumpin;2016;Kering
+Bogor;kec_Sukajaya;2016;Hijau
+Bogor;kec_Sukamakmur;2016;Hijau
+Bogor;kec_Sukaraja;2016;Kering
+Bogor;kec_Tajurhalang;2016;Kering
+Bogor;kec_Tamansari;2016;Hijau
+Bogor;kec_Tanjungsari;2016;Hijau
+Bogor;kec_Tenjo;2016;Hijau
+Bogor;kec_Tenjolaya;2016;Setengah Hijau
+Bogor;kota_bogor;2016;Kering
+Depok;Beji;2017;Kering
+Depok;Bojongsari;2017;Kering
+Depok;Cilodong;2017;Kering
+Depok;Cimanggis;2017;Setengah Hijau
+Depok;Cinere;2017;Kering
+Depok;Cipayung;2017;Kering
+Depok;Limo;2017;Kering
+Depok;PancoranMas;2017;Kering
+Depok;Sawangan;2017;Kering
+Depok;Sukmajaya;2017;Kering
+Depok;Tapos;2017;Kering
+Bogor;kec_Babakan_Madang;2017;Hijau
+Bogor;kec_BojongGede;2017;Setengah Hijau
+Bogor;kec_Caringin;2017;Hijau
+Bogor;kec_Cariu;2017;Hijau
+Bogor;kec_Ciampea;2017;Setengah Hijau
+Bogor;kec_Ciawi;2017;Setengah Hijau
+Bogor;kec_Cibinong;2017;Setengah Hijau
+Bogor;kec_Cibungbulang;2017;Hijau
+Bogor;kec_Cigombong;2017;Hijau
+Bogor;kec_Cigudeg;2017;Hijau
+Bogor;kec_Cijeruk;2017;Hijau
+Bogor;kec_Cileungsi;2017;Setengah Hijau
+Bogor;kec_Ciomas;2017;Setengah Hijau
+Bogor;kec_Cisarua;2017;Setengah Hijau
+Bogor;kec_Ciseng;2017;Hijau
+Bogor;kec_Citeureup;2017;Hijau
+Bogor;kec_Dramaga;2017;Hijau
+Bogor;kec_Gunungputri;2017;Setengah Hijau
+Bogor;kec_Gunungsindur;2017;Hijau
+Bogor;kec_Jasinga;2017;Hijau
+Bogor;kec_Jonggol;2017;Hijau
+Bogor;kec_Kemang;2017;Setengah Hijau
+Bogor;kec_Klapanunggal;2017;Hijau
+Bogor;kec_Leuwiliang;2017;Hijau
+Bogor;kec_Leuwisadeng;2017;Hijau
+Bogor;kec_Megamendung;2017;Hijau
+Bogor;kec_Nanggung;2017;Hijau
+Bogor;kec_Pamijahan;2017;Hijau
+Bogor;kec_Parung;2017;Setengah Hijau
+Bogor;kec_Parung_Panjang;2017;Hijau
+Bogor;kec_Rancabungur;2017;Hijau
+Bogor;kec_Rumpin;2017;Hijau
+Bogor;kec_Sukajaya;2017;Hijau
+Bogor;kec_Sukamakmur;2017;Hijau
+Bogor;kec_Sukaraja;2017;Hijau
+Bogor;kec_Tajurhalang;2017;Setengah Hijau
+Bogor;kec_Tamansari;2017;Hijau
+Bogor;kec_Tanjungsari;2017;Hijau
+Bogor;kec_Tenjo;2017;Hijau
+Bogor;kec_Tenjolaya;2017;Kering
+Bogor;kota_bogor;2017;Setengah Hijau
+Depok;Beji;2018;Kering
+Depok;Bojongsari;2018;Kering
+Depok;Cilodong;2018;Kering
+Depok;Cimanggis;2018;Kering
+Depok;Cinere;2018;Kering
+Depok;Cipayung;2018;Kering
+Depok;Limo;2018;Kering
+Depok;PancoranMas;2018;Kering
+Depok;Sawangan;2018;Kering
+Depok;Sukmajaya;2018;Kering
+Depok;Tapos;2018;Kering
+Bogor;kec_Babakan_Madang;2018;Hijau
+Bogor;kec_BojongGede;2018;Setengah Hijau
+Bogor;kec_Caringin;2018;Hijau
+Bogor;kec_Cariu;2018;Hijau
+Bogor;kec_Ciampea;2018;Hijau
+Bogor;kec_Ciawi;2018;Hijau
+Bogor;kec_Cibinong;2018;Setengah Hijau
+Bogor;kec_Cibungbulang;2018;Hijau
+Bogor;kec_Cigombong;2018;Hijau
+Bogor;kec_Cigudeg;2018;Hijau
+Bogor;kec_Cijeruk;2018;Hijau
+Bogor;kec_Cileungsi;2018;Setengah Hijau
+Bogor;kec_Ciomas;2018;Hijau
+Bogor;kec_Cisarua;2018;Hijau
+Bogor;kec_Ciseng;2018;Hijau
+Bogor;kec_Citeureup;2018;Hijau
+Bogor;kec_Dramaga;2018;Hijau
+Bogor;kec_Gunungputri;2018;Kering
+Bogor;kec_Gunungsindur;2018;Hijau
+Bogor;kec_Jasinga;2018;Hijau
+Bogor;kec_Jonggol;2018;Hijau
+Bogor;kec_Kemang;2018;Hijau
+Bogor;kec_Klapanunggal;2018;Hijau
+Bogor;kec_Leuwiliang;2018;Hijau
+Bogor;kec_Leuwisadeng;2018;Hijau
+Bogor;kec_Megamendung;2018;Hijau
+Bogor;kec_Nanggung;2018;Hijau
+Bogor;kec_Pamijahan;2018;Hijau
+Bogor;kec_Parung;2018;Hijau
+Bogor;kec_Parung_Panjang;2018;Hijau
+Bogor;kec_Rancabungur;2018;Hijau
+Bogor;kec_Rumpin;2018;Hijau
+Bogor;kec_Sukajaya;2018;Hijau
+Bogor;kec_Sukamakmur;2018;Hijau
+Bogor;kec_Sukaraja;2018;Hijau
+Bogor;kec_Tajurhalang;2018;Hijau
+Bogor;kec_Tamansari;2018;Hijau
+Bogor;kec_Tanjungsari;2018;Hijau
+Bogor;kec_Tenjo;2018;Hijau
+Bogor;kec_Tenjolaya;2018;Hijau
+Bogor;kota_bogor;2018;Setengah Hijau
+Depok;Beji;2019;Kering
+Depok;Bojongsari;2019;Setengah Hijau
+Depok;Cilodong;2019;Kering
+Depok;Cimanggis;2019;Kering
+Depok;Cinere;2019;Setengah Hijau
+Depok;Cipayung;2019;Kering
+Depok;Limo;2019;Kering
+Depok;PancoranMas;2019;Kering
+Depok;Sawangan;2019;Setengah Hijau
+Depok;Sukmajaya;2019;Kering
+Depok;Tapos;2019;Kering
+Bogor;kec_Babakan_Madang;2019;Hijau
+Bogor;kec_BojongGede;2019;Kering
+Bogor;kec_Caringin;2019;Hijau
+Bogor;kec_Cariu;2019;Hijau
+Bogor;kec_Ciampea;2019;Hijau
+Bogor;kec_Ciawi;2019;Hijau
+Bogor;kec_Cibinong;2019;Kering
+Bogor;kec_Cibungbulang;2019;Hijau
+Bogor;kec_Cigombong;2019;Hijau
+Bogor;kec_Cigudeg;2019;Hijau
+Bogor;kec_Cijeruk;2019;Hijau
+Bogor;kec_Cileungsi;2019;Kering
+Bogor;kec_Ciomas;2019;Setengah Hijau
+Bogor;kec_Cisarua;2019;Hijau
+Bogor;kec_Ciseng;2019;Hijau
+Bogor;kec_Citeureup;2019;Hijau
+Bogor;kec_Dramaga;2019;Hijau
+Bogor;kec_Gunungputri;2019;Kering
+Bogor;kec_Gunungsindur;2019;Hijau
+Bogor;kec_Jasinga;2019;Hijau
+Bogor;kec_Jonggol;2019;Hijau
+Bogor;kec_Kemang;2019;Hijau
+Bogor;kec_Klapanunggal;2019;Hijau
+Bogor;kec_Leuwiliang;2019;Hijau
+Bogor;kec_Leuwisadeng;2019;Hijau
+Bogor;kec_Megamendung;2019;Hijau
+Bogor;kec_Nanggung;2019;Hijau
+Bogor;kec_Pamijahan;2019;Hijau
+Bogor;kec_Parung;2019;Hijau
+Bogor;kec_Parung_Panjang;2019;Hijau
+Bogor;kec_Rancabungur;2019;Hijau
+Bogor;kec_Rumpin;2019;Hijau
+Bogor;kec_Sukajaya;2019;Hijau
+Bogor;kec_Sukamakmur;2019;Hijau
+Bogor;kec_Sukaraja;2019;Hijau
+Bogor;kec_Tajurhalang;2019;Hijau
+Bogor;kec_Tamansari;2019;Hijau
+Bogor;kec_Tanjungsari;2019;Hijau
+Bogor;kec_Tenjo;2019;Hijau
+Bogor;kec_Tenjolaya;2019;Hijau
+Bogor;kota_bogor;2019;Kering
+Depok;Beji;2020;Kering
+Depok;Bojongsari;2020;Kering
+Depok;Cilodong;2020;Kering
+Depok;Cimanggis;2020;Kering
+Depok;Cinere;2020;Kering
+Depok;Cipayung;2020;Kering
+Depok;Limo;2020;Kering
+Depok;PancoranMas;2020;Kering
+Depok;Sawangan;2020;Kering
+Depok;Sukmajaya;2020;Kering
+Depok;Tapos;2020;Kering
+Bogor;kec_Babakan_Madang;2020;Kering
+Bogor;kec_BojongGede;2020;Kering
+Bogor;kec_Caringin;2020;Kering
+Bogor;kec_Cariu;2020;Setengah Hijau
+Bogor;kec_Ciampea;2020;Kering
+Bogor;kec_Ciawi;2020;Setengah Hijau
+Bogor;kec_Cibinong;2020;Kering
+Bogor;kec_Cibungbulang;2020;Kering
+Bogor;kec_Cigombong;2020;Kering
+Bogor;kec_Cigudeg;2020;Hijau
+Bogor;kec_Cijeruk;2020;Kering
+Bogor;kec_Cileungsi;2020;Kering
+Bogor;kec_Ciomas;2020;Kering
+Bogor;kec_Cisarua;2020;Setengah Hijau
+Bogor;kec_Ciseng;2020;Kering
+Bogor;kec_Citeureup;2020;Kering
+Bogor;kec_Dramaga;2020;Kering
+Bogor;kec_Gunungputri;2020;Kering
+Bogor;kec_Gunungsindur;2020;Setengah Hijau
+Bogor;kec_Jasinga;2020;Hijau
+Bogor;kec_Jonggol;2020;Setengah Hijau
+Bogor;kec_Kemang;2020;Setengah Hijau
+Bogor;kec_Klapanunggal;2020;Setengah Hijau
+Bogor;kec_Leuwiliang;2020;Kering
+Bogor;kec_Leuwisadeng;2020;Kering
+Bogor;kec_Megamendung;2020;Kering
+Bogor;kec_Nanggung;2020;Setengah Hijau
+Bogor;kec_Pamijahan;2020;Kering
+Bogor;kec_Parung;2020;Kering
+Bogor;kec_Parung_Panjang;2020;Setengah Hijau
+Bogor;kec_Rancabungur;2020;Hijau
+Bogor;kec_Rumpin;2020;Hijau
+Bogor;kec_Sukajaya;2020;Setengah Hijau
+Bogor;kec_Sukamakmur;2020;Kering
+Bogor;kec_Sukaraja;2020;Kering
+Bogor;kec_Tajurhalang;2020;Kering
+Bogor;kec_Tamansari;2020;Kering
+Bogor;kec_Tanjungsari;2020;Kering
+Bogor;kec_Tenjo;2020;Hijau
+Bogor;kec_Tenjolaya;2020;Setengah Hijau
+Bogor;kota_bogor;2020;Kering
