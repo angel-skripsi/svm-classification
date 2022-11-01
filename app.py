@@ -16,7 +16,7 @@ mysql = MySQL(app)
 @app.route("/select_labeling_y/")
 def select_labeling_y():
   cursor = mysql.connection.cursor()
-  cursor.execute("SELECT Wilayah, Kecamatan, Tahun, Label FROM labeling")
+  cursor.execute("SELECT Wilayah, Kecamatan, Tahun, Label FROM labeling_y")
   rv = cursor.fetchall()
   cursor.close()
   payload = []
