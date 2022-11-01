@@ -58,6 +58,8 @@ try:
     print('Creating table landsat_8_raw')
     cursor.execute("CREATE TABLE landsat_8_raw (Id int(20) NOT NULL auto_increment, FileName varchar(255), Wilayah varchar(255), Kecamatan varchar(255), Tahun int(4), NDVI varchar(255), SAVI varchar(255), EVI varchar(255), PRIMARY KEY(Id))")
     cursor.execute("SET @@auto_increment_increment=1;")
+    cursor.execute("SET @MAX_QUESTIONS=0;") #This will set unlimited
+    cursor.execute("FLUSH PRIVILEGES;")
     print("Table landsat_8_raw is created")
     for year in os.listdir(root_path):
       for month in os.listdir(root_path+"\\"+year):
