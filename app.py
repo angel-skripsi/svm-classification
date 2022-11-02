@@ -13,16 +13,16 @@ app.config['MYSQL_DB'] = 'heroku_97dccdc5801db01'
 
 mysql = MySQL(app)
 
-@app.route("/select_labeling_y/")
-def select_labeling_y():
+@app.route("/select_landsat8/")
+def select_landsat8():
   cursor = mysql.connection.cursor()
-  cursor.execute("SELECT Wilayah, Kecamatan, Tahun, Label FROM labeling_y")
+  cursor.execute("SELECT Wilayah, Kecamatan, Tahun, NDVI, SAVI, EVI FROM landsat_8_raw")
   rv = cursor.fetchall()
   cursor.close()
   payload = []
   content = {}
   for result in rv:
-    content = {'Wilayah': result[0], 'Kecamatan': result[1], 'Tahun': result[2], 'Label': result[3]}
+    content = {'Wilayah': result[0], 'Kecamatan': result[1], 'Tahun': result[2], 'NDVI': result[3], 'SAVI': result[4], 'EVI': result[5]}
     payload.append(content)
     content = {}
   return jsonify(payload)
