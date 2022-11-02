@@ -1,12 +1,13 @@
 from PIL import Image as im
+from io import BytesIO
 from mysql.connector import Error
 import mysql.connector
 import numpy as np
-import pandas as pd
-import os
 import glob
-import fnmatch
 import rasterio
+import fnmatch
+import os
+import base64
 
 def ndvi_calc(b4_path, b5_path):
   if b4_path != "" and b5_path != "":
@@ -19,7 +20,7 @@ def ndvi_calc(b4_path, b5_path):
     return ndvi
   else:
     return None
-  
+      
 def savi_calc(b4_path, b5_path):
   if b4_path != "" and b5_path != "":
     b4i = rasterio.open(b4_path)
@@ -47,7 +48,7 @@ def evi_calc(b2_path, b4_path, b5_path):
     return None
 
 #Load and insert TIF and Band data to database
-root_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\dataset"
+root_path = "resources/dataset"
 list_Image = []
 count_num = 0
 try:
@@ -82,14 +83,14 @@ try:
             savi = savi_calc(B4_PATH, B5_PATH)
             evi = evi_calc(B2_PATH, B4_PATH, B5_PATH)
             ndvi_image = im.fromarray(ndvi)
-            ndvi_image_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\calculation\\ndvi\\"+year+"_"+month+"_"+wilayah+"_"+kecamatan+".tif"
+            ndvi_image_path = "output/calculation/ndvi/"+year+"_"+month+"_"+wilayah+"_"+kecamatan+".tif"
             ndvi_path = ndvi_image.save(ndvi_image_path, "TIFF")
             savi_image = im.fromarray(savi)
-            savi_image_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\calculation\\savi\\"+year+"_"+month+"_"+wilayah+"_"+kecamatan+".tif"
+            savi_image_path = "output/calculation/savi/"+year+"_"+month+"_"+wilayah+"_"+kecamatan+".tif"
             savi_path = savi_image.save(savi_image_path, "TIFF")
             evi_image = im.fromarray(evi)
-            evi_image_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\calculation\\evi\\"+year+"_"+month+"_"+wilayah+"_"+kecamatan+".tif"
-            evi_path = evi_image.save(evi_image_path, "TIFF")    
+            evi_image_path = "output/calculation/evi/"+year+"_"+month+"_"+wilayah+"_"+kecamatan+".tif"
+            evi_path = evi_image.save(evi_image_path, "TIFF")
             sql = "INSERT INTO heroku_97dccdc5801db01.landsat_8_raw (FileName, Wilayah, Kecamatan, Tahun, NDVI, SAVI, EVI) VALUES (%s,%s,%s,%s,%s,%s,%s)"
             val = (B2_PATH+";"+B4_PATH+";"+B5_PATH, wilayah, kecamatan, year, ndvi_image_path, savi_image_path, evi_image_path)
             cursor.execute(sql, val)
@@ -99,43 +100,49 @@ try:
 except Error as e:
   print("Failed inserting data into MySQL table {}".format(e))
 
-# #Select all data from labeling_y_raw and mapping it to Id and save it to database
-# root_path = "C:\Users\Angellina\Dropbox\My PC (LAPTOP-9GTQMRFV)\Desktop\ALL SKRIPSI\GITHUB\dataset"
-# try:
-#   conn = mysql.connector.connect(host="us-cdbr-east-06.cleardb.net", user="b539dadf046091", password="5b842ab0", database="heroku_97dccdc5801db01", port = "3306")
-#   if conn.is_connected():
-#     print("=======================================================================")
-#     cursor = conn.cursor()
-#     cursor.execute('DROP TABLE IF EXISTS images;')
-#     print('Creating table images')
-#     cursor.execute("CREATE TABLE images (Id int(20) NOT NULL auto_increment, Wilayah varchar(255), Kecamatan varchar(255), Tahun int(4), Band_2 longtext, Band_4 longtext, Band_5 longtext, PRIMARY KEY(Id))")
-#     cursor.execute("SET @@auto_increment_increment=1;")
-#     print("Table images is created")
-#     for year in os.listdir(root_path):
-#       for month in os.listdir(root_path+"\\"+year):
-#         bulan = month.split("-")[1]
-#         for wilayah in os.listdir(root_path+"\\"+year+"\\"+month):
-#           for kecamatan in os.listdir(root_path+"\\"+year+"\\"+month+"\\"+wilayah):
-#             B4_PATH = "" 
-#             B5_PATH = "" 
-#             B2_PATH = ""
-#             for filename in glob.iglob(root_path+"\\"+year+"\\"+month+"\\"+wilayah+"\\"+kecamatan + "\\" + '*.tif', recursive=True):
-#               if fnmatch.fnmatch (filename, '*B5*') or fnmatch.fnmatch (filename, '*TIF5*'):
-#                 B5_PATH = filename
-#                 with open(B5_PATH, "rb") as image_file:
-#                   b5_image_64_encode = base64.b64encode(image_file.read())
-#               elif fnmatch.fnmatch (filename, '*B4*') or fnmatch.fnmatch (filename, '*TIF4*'):
-#                 B4_PATH = filename
-#                 with open(B4_PATH, "rb") as image_file:
-#                   b4_image_64_encode = base64.b64encode(image_file.read())
-#               elif fnmatch.fnmatch (filename, '*B2*') or fnmatch.fnmatch (filename, '*TIF2*'):
-#                 B2_PATH = filename
-#                 with open(B2_PATH, "rb") as image_file:
-#                   b2_image_64_encode = base64.b64encode(image_file.read())
-#             images_data = wilayah,kecamatan,year,b2_image_64_encode,b4_image_64_encode,b5_image_64_encode
-#             sql = "INSERT INTO heroku_97dccdc5801db01.images (Wilayah, Kecamatan, Tahun, Band_2, Band_4, Band_5) VALUES (%s,%s,%s,%s,%s,%s)"
-#             cursor.execute(sql,images_data)
-#             conn.commit()
-#             print("Record for images inserted")
-# except Error as e:
-#   print("Error while connecting to MySQL", e)
+#Select all data from landsat_8_raw and mapping it to Id and save it to database
+try:
+  conn = mysql.connector.connect(host="us-cdbr-east-06.cleardb.net", user="b539dadf046091", password="5b842ab0", database="heroku_97dccdc5801db01", port = "3306")
+  if conn.is_connected():
+    print("=======================================================================")
+    cursor = conn.cursor()
+    cursor.execute('DROP TABLE IF EXISTS landsat_8;')
+    print('Creating table landsat_8')
+    cursor.execute("CREATE TABLE landsat_8 (Id int(20), Filename varchar(255), Id_wilayah int(20), Wilayah varchar(255), Id_kecamatan int(20), Kecamatan varchar(255), Tahun int(4), NDVI varchar(255), SAVI varchar(255), EVI varchar(255), Id_label int(20), Label varchar(255), PRIMARY KEY(Id))")
+    cursor.execute("SET @@auto_increment_increment=1;")
+    print("Table landsat_8 is created")
+    cursor.execute("SELECT a.Id, a.FileName, b.Id AS Id_wilayah, a.Wilayah, c.id AS Id_kecamatan, a.Kecamatan, a.Tahun, a.NDVI, a.SAVI, a.EVI, e.Id_label, e.Label FROM `landsat_8_raw` AS a LEFT JOIN `mapping_wilayah` AS b ON a.Wilayah = b.Wilayah LEFT JOIN `mapping_kecamatan` AS c ON a.Kecamatan = c.Kecamatan LEFT JOIN `labeling_y` AS e ON a.Wilayah = e.Wilayah AND a.Kecamatan = e.Kecamatan AND a.Tahun = e.Tahun ORDER BY 1")
+    record = cursor.fetchall()
+    for x in record:
+      sql = "INSERT INTO heroku_97dccdc5801db01.landsat_8 (Id, Filename, Id_wilayah, Wilayah, Id_kecamatan, Kecamatan, Tahun, NDVI, SAVI, EVI, Id_label, Label) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+      cursor.execute(sql, x)
+      conn.commit()
+    print("Record for landsat_8 inserted")
+except Error as e:
+  print("Error while connecting to MySQL", e)
+  
+#Select Wilayah data from labeling_y_raw and mapping it to Id and save it to database
+data_citra = []
+try:
+  conn = mysql.connector.connect(host="us-cdbr-east-06.cleardb.net", user="b539dadf046091", password="5b842ab0", database="heroku_97dccdc5801db01", port = "3306")
+  if conn.is_connected():
+    print("=======================================================================")
+    cursor = conn.cursor()
+    cursor.execute("SELECT Band_2 FROM images LIMIT 1")
+    record = cursor.fetchall()
+    for x in record:
+      data_citra.append(x)
+    for i in range(len(data_citra)):
+      a = data_citra[i][0]
+      # im = Image.open(BytesIO(base64.b64decode(a)))
+      # im.save('image1.png', 'PNG')
+      image = base64.b64decode(a + '=' * (-len(a) % 4)) #bytes
+      x2 = "".join(["{:08b}".format(x) for x in image])
+      x3 = float(x2)
+      print(x2)
+      # x1 = base64.b64decode(a)
+      # x2 = "".join(["{:08b}".format(x) for x in x1])
+      # print(type(x2))
+    print("Record for mapping_wilayah inserted")
+except Error as e:
+  print("Error while connecting to MySQL", e)
