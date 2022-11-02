@@ -1,4 +1,5 @@
 from PIL import Image as im
+from io import BytesIO
 from mysql.connector import Error
 import mysql.connector
 import numpy as np
@@ -116,5 +117,31 @@ try:
       cursor.execute(sql, x)
       conn.commit()
     print("Record for landsat_8 inserted")
+except Error as e:
+  print("Error while connecting to MySQL", e)
+  
+#Select Wilayah data from labeling_y_raw and mapping it to Id and save it to database
+data_citra = []
+try:
+  conn = mysql.connector.connect(host="us-cdbr-east-06.cleardb.net", user="b539dadf046091", password="5b842ab0", database="heroku_97dccdc5801db01", port = "3306")
+  if conn.is_connected():
+    print("=======================================================================")
+    cursor = conn.cursor()
+    cursor.execute("SELECT Band_2 FROM images LIMIT 1")
+    record = cursor.fetchall()
+    for x in record:
+      data_citra.append(x)
+    for i in range(len(data_citra)):
+      a = data_citra[i][0]
+      # im = Image.open(BytesIO(base64.b64decode(a)))
+      # im.save('image1.png', 'PNG')
+      image = base64.b64decode(a + '=' * (-len(a) % 4)) #bytes
+      x2 = "".join(["{:08b}".format(x) for x in image])
+      x3 = float(x2)
+      print(x2)
+      # x1 = base64.b64decode(a)
+      # x2 = "".join(["{:08b}".format(x) for x in x1])
+      # print(type(x2))
+    print("Record for mapping_wilayah inserted")
 except Error as e:
   print("Error while connecting to MySQL", e)
