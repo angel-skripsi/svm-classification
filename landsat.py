@@ -2,7 +2,6 @@ from PIL import Image as im
 from mysql.connector import Error
 import mysql.connector
 import numpy as np
-import pandas as pd
 import os
 import glob
 import fnmatch
@@ -57,10 +56,8 @@ try:
     cursor = conn.cursor()
     cursor.execute('DROP TABLE IF EXISTS landsat_8_raw;')
     print('Creating table landsat_8_raw')
-    cursor.execute("CREATE TABLE landsat_8_raw (Id int(20) NOT NULL auto_increment, FileName varchar(255), Wilayah varchar(255), Kecamatan varchar(255), Tahun int(4), NDVI varchar(255), SAVI varchar(255), EVI varchar(255), PRIMARY KEY(Id))")
+    cursor.execute("CREATE TABLE landsat_8_raw (Id int(20) NOT NULL auto_increment, FileName text, Wilayah varchar(255), Kecamatan varchar(255), Tahun int(4), NDVI varchar(255), SAVI varchar(255), EVI varchar(255), PRIMARY KEY(Id))")
     cursor.execute("SET @@auto_increment_increment=1;")
-    cursor.execute("SET @MAX_QUESTIONS=0;") #This will set unlimited
-    cursor.execute("FLUSH PRIVILEGES;")
     print("Table landsat_8_raw is created")
     for year in os.listdir(root_path):
       for month in os.listdir(root_path+"\\"+year):
@@ -99,43 +96,25 @@ try:
 except Error as e:
   print("Failed inserting data into MySQL table {}".format(e))
 
-# #Select all data from labeling_y_raw and mapping it to Id and save it to database
-# root_path = "C:\Users\Angellina\Dropbox\My PC (LAPTOP-9GTQMRFV)\Desktop\ALL SKRIPSI\GITHUB\dataset"
-# try:
-#   conn = mysql.connector.connect(host="us-cdbr-east-06.cleardb.net", user="b539dadf046091", password="5b842ab0", database="heroku_97dccdc5801db01", port = "3306")
-#   if conn.is_connected():
-#     print("=======================================================================")
-#     cursor = conn.cursor()
-#     cursor.execute('DROP TABLE IF EXISTS images;')
-#     print('Creating table images')
-#     cursor.execute("CREATE TABLE images (Id int(20) NOT NULL auto_increment, Wilayah varchar(255), Kecamatan varchar(255), Tahun int(4), Band_2 longtext, Band_4 longtext, Band_5 longtext, PRIMARY KEY(Id))")
-#     cursor.execute("SET @@auto_increment_increment=1;")
-#     print("Table images is created")
-#     for year in os.listdir(root_path):
-#       for month in os.listdir(root_path+"\\"+year):
-#         bulan = month.split("-")[1]
-#         for wilayah in os.listdir(root_path+"\\"+year+"\\"+month):
-#           for kecamatan in os.listdir(root_path+"\\"+year+"\\"+month+"\\"+wilayah):
-#             B4_PATH = "" 
-#             B5_PATH = "" 
-#             B2_PATH = ""
-#             for filename in glob.iglob(root_path+"\\"+year+"\\"+month+"\\"+wilayah+"\\"+kecamatan + "\\" + '*.tif', recursive=True):
-#               if fnmatch.fnmatch (filename, '*B5*') or fnmatch.fnmatch (filename, '*TIF5*'):
-#                 B5_PATH = filename
-#                 with open(B5_PATH, "rb") as image_file:
-#                   b5_image_64_encode = base64.b64encode(image_file.read())
-#               elif fnmatch.fnmatch (filename, '*B4*') or fnmatch.fnmatch (filename, '*TIF4*'):
-#                 B4_PATH = filename
-#                 with open(B4_PATH, "rb") as image_file:
-#                   b4_image_64_encode = base64.b64encode(image_file.read())
-#               elif fnmatch.fnmatch (filename, '*B2*') or fnmatch.fnmatch (filename, '*TIF2*'):
-#                 B2_PATH = filename
-#                 with open(B2_PATH, "rb") as image_file:
-#                   b2_image_64_encode = base64.b64encode(image_file.read())
-#             images_data = wilayah,kecamatan,year,b2_image_64_encode,b4_image_64_encode,b5_image_64_encode
-#             sql = "INSERT INTO heroku_97dccdc5801db01.images (Wilayah, Kecamatan, Tahun, Band_2, Band_4, Band_5) VALUES (%s,%s,%s,%s,%s,%s)"
-#             cursor.execute(sql,images_data)
-#             conn.commit()
-#             print("Record for images inserted")
-# except Error as e:
-#   print("Error while connecting to MySQL", e)
+#Select all data from landsat_8_raw and mapping it to Id and save it to database
+count_num_2 = 0
+try:
+  conn = mysql.connector.connect(host="us-cdbr-east-06.cleardb.net", user="b539dadf046091", password="5b842ab0", database="heroku_97dccdc5801db01", port = "3306")
+  if conn.is_connected():
+    print("=======================================================================")
+    cursor = conn.cursor()
+    cursor.execute('DROP TABLE IF EXISTS landsat_8;')
+    print('Creating table landsat_8')
+    cursor.execute("CREATE TABLE landsat_8 (Id int(20), Filename text, Id_wilayah int(20), Wilayah varchar(255), Id_kecamatan int(20), Kecamatan varchar(255), Tahun int(4), NDVI varchar(255), SAVI varchar(255), EVI varchar(255), Id_label int(20), Label varchar(255), PRIMARY KEY(Id))")
+    cursor.execute("SET @@auto_increment_increment=1;")
+    print("Table landsat_8 is created")
+    cursor.execute("SELECT a.Id, a.FileName, b.Id AS Id_wilayah, a.Wilayah, c.id AS Id_kecamatan, a.Kecamatan, a.Tahun, a.NDVI, a.SAVI, a.EVI, e.Id_label, e.Label FROM `landsat_8_raw` AS a LEFT JOIN `mapping_wilayah` AS b ON a.Wilayah = b.Wilayah LEFT JOIN `mapping_kecamatan` AS c ON a.Kecamatan = c.Kecamatan LEFT JOIN `labeling_y` AS e ON a.Wilayah = e.Wilayah AND a.Kecamatan = e.Kecamatan AND a.Tahun = e.Tahun ORDER BY 1")
+    record = cursor.fetchall()
+    for x in record:
+      sql = "INSERT INTO heroku_97dccdc5801db01.landsat_8 (Id, Filename, Id_wilayah, Wilayah, Id_kecamatan, Kecamatan, Tahun, NDVI, SAVI, EVI, Id_label, Label) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+      cursor.execute(sql, x)
+      conn.commit()
+      count_num_2 = count_num_2 + 1
+      print(count_num_2, "Record for landsat_8 inserted")
+except Error as e:
+  print("Error while connecting to MySQL", e)
