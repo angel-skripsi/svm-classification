@@ -99,7 +99,7 @@ try:
 except Error as e:
   print("Failed inserting data into MySQL table {}".format(e))
 
-#Select all data from landsat_8_raw and do resize
+#Select all data from landsat_8_raw and do resized
 data_citra = []
 data_training = pd.DataFrame(columns=['NDVI','SAVI','EVI'])
 warnings.filterwarnings('ignore')
