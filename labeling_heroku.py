@@ -6,7 +6,7 @@ import pandas as pd
 labeldata = pd.read_csv('resources/full_labeling.csv', index_col=False, delimiter = ';')
 labeldata.head()
 try:
-  conn = mysql.connector.connect(host="localhost", user="root", password="", database="smt_7_skripsi", port = "3310")
+  conn = mysql.connector.connect(host="us-cdbr-east-06.cleardb.net", user="b539dadf046091", password="5b842ab0", database="heroku_97dccdc5801db01", port = "3306")
   if conn.is_connected():
     print("=======================================================================")
     cursor = conn.cursor()
@@ -19,7 +19,7 @@ try:
     cursor.execute("SET @@auto_increment_increment=1;")
     print("Table labeling_y_raw is created")
     for i,row in labeldata.iterrows():
-      sql = "INSERT INTO smt_7_skripsi.labeling_y_raw (Wilayah, Kecamatan, Tahun, Label) VALUES (%s,%s,%s,%s)"
+      sql = "INSERT INTO heroku_97dccdc5801db01.labeling_y_raw (Wilayah, Kecamatan, Tahun, Label) VALUES (%s,%s,%s,%s)"
       cursor.execute(sql, tuple(row))
       conn.commit()
     print("Record for labeling_y_raw inserted")
@@ -28,7 +28,7 @@ except Error as e:
 
 #Select Wilayah data from labeling_y_raw and mapping it to Id and save it to database
 try:
-  conn = mysql.connector.connect(host="localhost", user="root", password="", database="smt_7_skripsi", port = "3310")
+  conn = mysql.connector.connect(host="us-cdbr-east-06.cleardb.net", user="b539dadf046091", password="5b842ab0", database="heroku_97dccdc5801db01", port = "3306")
   if conn.is_connected():
     print("=======================================================================")
     cursor = conn.cursor()
@@ -40,7 +40,7 @@ try:
     cursor.execute("SELECT DISTINCT Wilayah FROM labeling_y_raw ORDER BY 1")
     record = cursor.fetchall()
     for x in record:
-      sql = "INSERT INTO smt_7_skripsi.mapping_wilayah (Wilayah) VALUES (%s)"
+      sql = "INSERT INTO heroku_97dccdc5801db01.mapping_wilayah (Wilayah) VALUES (%s)"
       cursor.execute(sql, x)
       conn.commit()
     print("Record for mapping_wilayah inserted")
@@ -49,7 +49,7 @@ except Error as e:
 
 #Select Kecamatan data from labeling_y_raw and mapping it to Id and save it to database
 try:
-  conn = mysql.connector.connect(host="localhost", user="root", password="", database="smt_7_skripsi", port = "3310")
+  conn = mysql.connector.connect(host="us-cdbr-east-06.cleardb.net", user="b539dadf046091", password="5b842ab0", database="heroku_97dccdc5801db01", port = "3306")
   if conn.is_connected():
     print("=======================================================================")
     cursor = conn.cursor()
@@ -61,7 +61,7 @@ try:
     cursor.execute("SELECT DISTINCT Kecamatan FROM labeling_y_raw ORDER BY 1")
     record = cursor.fetchall()
     for x in record:
-      sql = "INSERT INTO smt_7_skripsi.mapping_kecamatan (Kecamatan) VALUES (%s)"
+      sql = "INSERT INTO heroku_97dccdc5801db01.mapping_kecamatan (Kecamatan) VALUES (%s)"
       cursor.execute(sql, x)
       conn.commit()
     print("Record for mapping_kecamatan inserted")
@@ -70,7 +70,7 @@ except Error as e:
   
 #Select Label data from labeling_y_raw and mapping it to Id and save it to database
 try:
-  conn = mysql.connector.connect(host="localhost", user="root", password="", database="smt_7_skripsi", port = "3310")
+  conn = mysql.connector.connect(host="us-cdbr-east-06.cleardb.net", user="b539dadf046091", password="5b842ab0", database="heroku_97dccdc5801db01", port = "3306")
   if conn.is_connected():
     print("=======================================================================")
     cursor = conn.cursor()
@@ -82,7 +82,7 @@ try:
     cursor.execute("SELECT DISTINCT Label FROM labeling_y_raw ORDER BY 1")
     record = cursor.fetchall()
     for x in record:
-      sql = "INSERT INTO smt_7_skripsi.mapping_label (Label) VALUES (%s)"
+      sql = "INSERT INTO heroku_97dccdc5801db01.mapping_label (Label) VALUES (%s)"
       cursor.execute(sql, x)
       conn.commit()
     print("Record for mapping_label inserted")
@@ -91,7 +91,7 @@ except Error as e:
 
 #Select all data from labeling_y_raw and mapping it to Id and save it to database
 try:
-  conn = mysql.connector.connect(host="localhost", user="root", password="", database="smt_7_skripsi", port = "3310")
+  conn = mysql.connector.connect(host="us-cdbr-east-06.cleardb.net", user="b539dadf046091", password="5b842ab0", database="heroku_97dccdc5801db01", port = "3306")
   if conn.is_connected():
     print("=======================================================================")
     cursor = conn.cursor()
@@ -103,7 +103,7 @@ try:
     cursor.execute("SELECT a.Id, b.Id AS Id_wilayah, a.Wilayah, c.id AS Id_kecamatan, a.Kecamatan, a.Tahun, d.Id AS Id_label, a.Label FROM `labeling_y_raw` AS a LEFT JOIN `mapping_wilayah` AS b ON a.Wilayah = b.Wilayah LEFT JOIN `mapping_kecamatan` AS c ON a.Kecamatan = c.Kecamatan LEFT JOIN `mapping_label` AS d ON a.Label = d.Label ORDER BY 1")
     record = cursor.fetchall()
     for x in record:
-      sql = "INSERT INTO smt_7_skripsi.labeling_y (Id, Id_wilayah, Wilayah, Id_kecamatan, Kecamatan, Tahun, Id_label, Label) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"
+      sql = "INSERT INTO heroku_97dccdc5801db01.labeling_y (Id, Id_wilayah, Wilayah, Id_kecamatan, Kecamatan, Tahun, Id_label, Label) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"
       cursor.execute(sql, x)
       conn.commit()
     print("Record for labeling_y inserted")
