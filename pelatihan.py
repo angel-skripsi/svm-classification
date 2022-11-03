@@ -2,7 +2,6 @@ from PIL import Image as im
 from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
 from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
-from statistics import mean
 # from io import BytesIO
 from mysql.connector import Error
 import mysql.connector
