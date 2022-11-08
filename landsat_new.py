@@ -65,13 +65,13 @@ try:
     savi = savi_calc(B4_PATH, B5_PATH)
     evi = evi_calc(B2_PATH, B4_PATH, B5_PATH)
     ndvi_image = im.fromarray(ndvi)
-    ndvi_image_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\calculation\\ndvi\\"+Tahun+"_"+Month+"_"+Wilayah+"_"+Kecamatan+".tif"
+    ndvi_image_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\calculation\\pelatihan\\ndvi\\"+Tahun+"_"+Month+"_"+Wilayah+"_"+Kecamatan+".tif"
     ndvi_path = ndvi_image.save(ndvi_image_path, "TIFF")
     savi_image = im.fromarray(savi)
-    savi_image_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\calculation\\savi\\"+Tahun+"_"+Month+"_"+Wilayah+"_"+Kecamatan+".tif"
+    savi_image_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\calculation\\pelatihan\\savi\\"+Tahun+"_"+Month+"_"+Wilayah+"_"+Kecamatan+".tif"
     savi_path = savi_image.save(savi_image_path, "TIFF")
     evi_image = im.fromarray(evi)
-    evi_image_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\calculation\\evi\\"+Tahun+"_"+Month+"_"+Wilayah+"_"+Kecamatan+".tif"
+    evi_image_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\calculation\\pelatihan\\evi\\"+Tahun+"_"+Month+"_"+Wilayah+"_"+Kecamatan+".tif"
     evi_path = evi_image.save(evi_image_path, "TIFF")    
     sql = "INSERT INTO smt_7_skripsi.landsat_8_raw (FileName, Wilayah, Kecamatan, Tahun, NDVI, SAVI, EVI) VALUES (%s,%s,%s,%s,%s,%s,%s)"
     val = (B2_Filename+";"+B4_Filename+";"+B5_Filename, Wilayah, Kecamatan, Tahun, ndvi_image_path, savi_image_path, evi_image_path)
