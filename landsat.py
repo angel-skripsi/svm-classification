@@ -54,11 +54,11 @@ try:
   if conn.is_connected():
     print("=======================================================================")
     cursor = conn.cursor()
-    cursor.execute('DROP TABLE IF EXISTS landsat_8_raw;')
-    print('Creating table landsat_8_raw')
-    cursor.execute("CREATE TABLE landsat_8_raw (Id int(20) NOT NULL auto_increment, FileName text, Wilayah varchar(255), Kecamatan varchar(255), Tahun int(4), NDVI varchar(255), SAVI varchar(255), EVI varchar(255), PRIMARY KEY(Id))")
+    cursor.execute('DROP TABLE IF EXISTS landsat_8_pelatihan_raw;')
+    print('Creating table landsat_8_pelatihan_raw')
+    cursor.execute("CREATE TABLE landsat_8_pelatihan_raw (Id int(20) NOT NULL auto_increment, FileName text, Wilayah varchar(255), Kecamatan varchar(255), Tahun int(4), NDVI varchar(255), SAVI varchar(255), EVI varchar(255), PRIMARY KEY(Id))")
     cursor.execute("SET @@auto_increment_increment=1;")
-    print("Table landsat_8_raw is created")
+    print("Table landsat_8_pelatihan_raw is created")
     for year in os.listdir(root_path):
       for month in os.listdir(root_path+"\\"+year):
         bulan = month.split("-")[1]
@@ -87,34 +87,34 @@ try:
             evi_image = im.fromarray(evi)
             evi_image_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\calculation\\pelatihan\\evi\\"+year+"_"+month+"_"+wilayah+"_"+kecamatan+".tif"
             evi_path = evi_image.save(evi_image_path, "TIFF")    
-            sql = "INSERT INTO smt_7_skripsi.landsat_8_raw (FileName, Wilayah, Kecamatan, Tahun, NDVI, SAVI, EVI) VALUES (%s,%s,%s,%s,%s,%s,%s)"
+            sql = "INSERT INTO smt_7_skripsi.landsat_8_pelatihan_raw (FileName, Wilayah, Kecamatan, Tahun, NDVI, SAVI, EVI) VALUES (%s,%s,%s,%s,%s,%s,%s)"
             val = (B2_PATH+";"+B4_PATH+";"+B5_PATH, wilayah, kecamatan, year, ndvi_image_path, savi_image_path, evi_image_path)
             cursor.execute(sql, val)
             conn.commit()
             count_num = count_num + 1
-            print(count_num, "Record for landsat_8_raw inserted")
+            print(count_num, "Record for landsat_8_pelatihan_raw inserted")
 except Error as e:
   print("Failed inserting data into MySQL table {}".format(e))
 
-#Select all data from landsat_8_raw and mapping it to Id and save it to database
+#Select all data from landsat_8_pelatihan_raw and mapping it to Id and save it to database
 count_num_3 = 0
 try:
   conn = mysql.connector.connect(host="localhost", user="root", password="", database="smt_7_skripsi", port = "3310")
   if conn.is_connected():
     print("=======================================================================")
     cursor = conn.cursor()
-    cursor.execute('DROP TABLE IF EXISTS landsat_8;')
-    print('Creating table landsat_8')
-    cursor.execute("CREATE TABLE landsat_8 (Id int(20), Filename text, Id_wilayah int(20), Wilayah varchar(255), Id_kecamatan int(20), Kecamatan varchar(255), Tahun int(4), NDVI varchar(255), SAVI varchar(255), EVI varchar(255), Id_label int(20), Label varchar(255), PRIMARY KEY(Id))")
+    cursor.execute('DROP TABLE IF EXISTS landsat_8_pelatihan;')
+    print('Creating table landsat_8_pelatihan')
+    cursor.execute("CREATE TABLE landsat_8_pelatihan (Id int(20), Filename text, Id_wilayah int(20), Wilayah varchar(255), Id_kecamatan int(20), Kecamatan varchar(255), Tahun int(4), NDVI varchar(255), SAVI varchar(255), EVI varchar(255), Id_label int(20), Label varchar(255), PRIMARY KEY(Id))")
     cursor.execute("SET @@auto_increment_increment=1;")
-    print("Table landsat_8 is created")
-    cursor.execute("SELECT a.Id, a.FileName, b.Id AS Id_wilayah, a.Wilayah, c.id AS Id_kecamatan, a.Kecamatan, a.Tahun, a.NDVI, a.SAVI, a.EVI, e.Id_label, e.Label FROM `landsat_8_raw` AS a LEFT JOIN `mapping_wilayah` AS b ON a.Wilayah = b.Wilayah LEFT JOIN `mapping_kecamatan` AS c ON a.Kecamatan = c.Kecamatan LEFT JOIN `labeling_y` AS e ON a.Wilayah = e.Wilayah AND a.Kecamatan = e.Kecamatan AND a.Tahun = e.Tahun ORDER BY 1")
+    print("Table landsat_8_pelatihan is created")
+    cursor.execute("SELECT a.Id, a.FileName, b.Id AS Id_wilayah, a.Wilayah, c.id AS Id_kecamatan, a.Kecamatan, a.Tahun, a.NDVI, a.SAVI, a.EVI, e.Id_label, e.Label FROM `landsat_8_pelatihan_raw` AS a LEFT JOIN `mapping_wilayah` AS b ON a.Wilayah = b.Wilayah LEFT JOIN `mapping_kecamatan` AS c ON a.Kecamatan = c.Kecamatan LEFT JOIN `labeling_y` AS e ON a.Wilayah = e.Wilayah AND a.Kecamatan = e.Kecamatan AND a.Tahun = e.Tahun ORDER BY 1")
     record = cursor.fetchall()
     for x in record:
-      sql = "INSERT INTO smt_7_skripsi.landsat_8 (Id, Filename, Id_wilayah, Wilayah, Id_kecamatan, Kecamatan, Tahun, NDVI, SAVI, EVI, Id_label, Label) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+      sql = "INSERT INTO smt_7_skripsi.landsat_8_pelatihan (Id, Filename, Id_wilayah, Wilayah, Id_kecamatan, Kecamatan, Tahun, NDVI, SAVI, EVI, Id_label, Label) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
       cursor.execute(sql, x)
       conn.commit()
       count_num_3 = count_num_3 + 1
-      print(count_num_3, "Record for landsat_8 inserted")
+      print(count_num_3, "Record for landsat_8_pelatihan inserted")
 except Error as e:
   print("Error while connecting to MySQL", e)

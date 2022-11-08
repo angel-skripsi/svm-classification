@@ -39,7 +39,7 @@ def plot_confusion_matrix(cm,classes,normalize=False,title='Confusion Matrix',cm
   plt.ylabel('true_label')
   plt.xlabel('predict_label')
 
-#Select all data from landsat_8 and create plot for training data
+#Select all data from landsat_8_pelatihan and create plot for training data
 data_citra = []
 data_training = pd.DataFrame(columns=['NDVI','SAVI','EVI','Label'])
 warnings.filterwarnings('ignore')
@@ -48,7 +48,7 @@ try:
   if conn.is_connected():
     print("=======================================================================")
     cursor = conn.cursor()
-    cursor.execute("SELECT NDVI, SAVI, EVI, Label FROM `landsat_8`")
+    cursor.execute("SELECT NDVI, SAVI, EVI, Label FROM `landsat_8_pelatihan`")
     record = cursor.fetchall()
     for x in record:
       data_citra.append(x)
@@ -70,7 +70,7 @@ try:
 except Error as e:
   print("Error while connecting to MySQL", e)
 
-#Select all data from landsat_8 and do training process and generate model
+#Select all data from landsat_8_pelatihan and do training process and generate model
 flat_data_arr = []
 target_arr = []
 warnings.filterwarnings('ignore')
@@ -79,7 +79,7 @@ try:
   if conn.is_connected():
     print("=======================================================================")
     cursor = conn.cursor()
-    cursor.execute("SELECT NDVI AS data_input, Id_label FROM landsat_8 UNION ALL SELECT SAVI AS data_input, Id_label FROM landsat_8 UNION ALL SELECT EVI AS data_input, Id_label FROM landsat_8;")
+    cursor.execute("SELECT NDVI AS data_input, Id_label FROM landsat_8_pelatihan UNION ALL SELECT SAVI AS data_input, Id_label FROM landsat_8_pelatihan UNION ALL SELECT EVI AS data_input, Id_label FROM landsat_8_pelatihan;")
     record = cursor.fetchall()
     record_count = int(len(record)/3)
     for x in record:
