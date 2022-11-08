@@ -16,7 +16,7 @@ mysql = MySQL(app)
 @app.route("/select_landsat8/")
 def select_landsat8():
   cursor = mysql.connection.cursor()
-  cursor.execute("SELECT Wilayah, Kecamatan, Tahun, NDVI, SAVI, EVI FROM landsat_8_raw")
+  cursor.execute("SELECT Wilayah, Kecamatan, Tahun, NDVI, SAVI, EVI FROM landsat_8_pelatihan_raw")
   rv = cursor.fetchall()
   cursor.close()
   payload = []
