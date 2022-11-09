@@ -14,32 +14,6 @@ import joblib
 import warnings
 import itertools
 import rasterio
-
-def appendDictToDF(df,dictToAppend):
-  df = pd.concat([df, pd.DataFrame.from_records([dictToAppend])])
-  return df
-
-def plot_confusion_matrix(cm,classes,normalize=False,title='Confusion Matrix',cmap=plt.cm.Blues):
-  if normalize:
-    cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
-    print("Normalized confusion matrix")
-  else:
-    print('Confusion matrix, without normalization')
-  print(cm)
-  plt.figure(figsize=(10,7))
-  plt.imshow(cm, interpolation='nearest', cmap=cmap)
-  plt.title(title)
-  plt.colorbar()
-  tick_marks = np.arange(len(classes))
-  plt.xticks(tick_marks, classes, rotation=0)
-  plt.yticks(tick_marks, classes)
-  fmt = '.2f' if normalize else 'd'
-  thresh = cm.max() / 2.
-  for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
-    plt.text(j, i, format(cm[i, j], fmt), horizontalalignment="center", color="white" if cm[i, j] > thresh else "black")
-  plt.tight_layout()
-  plt.ylabel('true_label')
-  plt.xlabel('predict_label')
   
 def ndvi_calc(b4_path, b5_path):
   if b4_path != "" and b5_path != "":
@@ -85,22 +59,56 @@ Tahun = "2020"
 Month = "2020-07-bogor"
 Wilayah = "Bogor"
 Kecamatan = "kec_Babakan_Madang"
-B2_Filename = root+"\\"+Tahun+"\\"+Month+"\\"+Wilayah+"\\"+Kecamatan+"\\"+"TIF2_crop.tif"
-B4_Filename = root+"\\"+Tahun+"\\"+Month+"\\"+Wilayah+"\\"+Kecamatan+"\\"+"TIF4_crop.tif"
-B5_Filename = root+"\\"+Tahun+"\\"+Month+"\\"+Wilayah+"\\"+Kecamatan+"\\"+"TIF5_crop.tif"
-B2_PATH = root+"\\"+Month+"\\"+Wilayah+"\\"+Kecamatan+"\\"+"TIF2_crop.tif"
-B4_PATH = root+"\\"+Month+"\\"+Wilayah+"\\"+Kecamatan+"\\"+"TIF4_crop.tif"
-B5_PATH = root+"\\"+Month+"\\"+Wilayah+"\\"+Kecamatan+"\\"+"TIF5_crop.tif"
+B2_PATH = root+"\\"+Tahun+"\\"+Month+"\\"+Wilayah+"\\"+Kecamatan+"\\"+"TIF2_crop.tif"
+B4_PATH = root+"\\"+Tahun+"\\"+Month+"\\"+Wilayah+"\\"+Kecamatan+"\\"+"TIF4_crop.tif"
+B5_PATH = root+"\\"+Tahun+"\\"+Month+"\\"+Wilayah+"\\"+Kecamatan+"\\"+"TIF5_crop.tif"
 count_num = 0
-ndvi = ndvi_calc(B4_PATH, B5_PATH)
-savi = savi_calc(B4_PATH, B5_PATH)
-evi = evi_calc(B2_PATH, B4_PATH, B5_PATH)
-ndvi_image = im.fromarray(ndvi)
-ndvi_image_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\calculation\\pengujian\\ndvi\\"+Tahun+"_"+Month+"_"+Wilayah+"_"+Kecamatan+".tif"
-ndvi_path = ndvi_image.save(ndvi_image_path, "TIFF")
-savi_image = im.fromarray(savi)
-savi_image_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\calculation\\pengujian\\savi\\"+Tahun+"_"+Month+"_"+Wilayah+"_"+Kecamatan+".tif"
-savi_path = savi_image.save(savi_image_path, "TIFF")
-evi_image = im.fromarray(evi)
-evi_image_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\calculation\\pengujian\\evi\\"+Tahun+"_"+Month+"_"+Wilayah+"_"+Kecamatan+".tif"
-evi_path = evi_image.save(evi_image_path, "TIFF")
+try:
+  conn = mysql.connector.connect(host="localhost", user="root", password="", database="smt_7_skripsi", port = "3310")
+  if conn.is_connected():
+    print("=======================================================================")
+    cursor = conn.cursor()
+    ndvi = ndvi_calc(B4_PATH, B5_PATH)
+    savi = savi_calc(B4_PATH, B5_PATH)
+    evi = evi_calc(B2_PATH, B4_PATH, B5_PATH)
+    ndvi_image = im.fromarray(ndvi)
+    ndvi_image_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\calculation\\pengujian\\ndvi\\"+Tahun+"_"+Month+"_"+Wilayah+"_"+Kecamatan+".tif"
+    ndvi_path = ndvi_image.save(ndvi_image_path, "TIFF")
+    savi_image = im.fromarray(savi)
+    savi_image_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\calculation\\pengujian\\savi\\"+Tahun+"_"+Month+"_"+Wilayah+"_"+Kecamatan+".tif"
+    savi_path = savi_image.save(savi_image_path, "TIFF")
+    evi_image = im.fromarray(evi)
+    evi_image_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\calculation\\pengujian\\evi\\"+Tahun+"_"+Month+"_"+Wilayah+"_"+Kecamatan+".tif"
+    evi_path = evi_image.save(evi_image_path, "TIFF")
+    sql = "INSERT INTO smt_7_skripsi.landsat_8_pengujian (FileName, Wilayah, Kecamatan, Tahun, NDVI, SAVI, EVI) VALUES (%s,%s,%s,%s,%s,%s,%s)"
+    val = (B2_PATH+";"+B4_PATH+";"+B5_PATH, Wilayah, Kecamatan, Tahun, ndvi_image_path, savi_image_path, evi_image_path)
+    cursor.execute(sql, val)
+    conn.commit()
+    count_num = count_num + 1
+    print(count_num, "Record for landsat_8_pengujian inserted")
+except Error as e:
+  print("Failed inserting data into MySQL table {}".format(e))
+  
+#Select all data from landsat_8_pelatihan and do training process and generate model
+flat_data_arr = []
+warnings.filterwarnings('ignore')
+try:
+  conn = mysql.connector.connect(host="localhost", user="root", password="", database="smt_7_skripsi", port = "3310")
+  if conn.is_connected():
+    print("=======================================================================")
+    cursor = conn.cursor()
+    cursor.execute("SELECT NDVI AS data_input FROM landsat_8_pelatihan WHERE Id = (SELECT MAX(Id) FROM landsat_8_pengujian) UNION ALL SELECT SAVI AS data_input FROM landsat_8_pelatihan WHERE Id = (SELECT MAX(Id) FROM landsat_8_pengujian) UNION ALL SELECT EVI AS data_input FROM landsat_8_pengujian WHERE Id = (SELECT MAX(Id) FROM landsat_8_pengujian);")
+    record = cursor.fetchall()
+    for x in record:
+      data_input = x[0]
+      img_array = imread(data_input)
+      img_resized = resize(img_array, (100,100))
+      flat_data_arr.append(img_resized.flatten())
+    flat_data = np.array(flat_data_arr)
+    df = pd.DataFrame(flat_data)
+    print("Data testing size:" + str(df.shape))  
+    svm_model = joblib.load("output/data_model/svm_data_model.pkl")
+    y_test = svm_model.predict(df)
+    print(y_test)
+except Error as e:
+  print("Error while connecting to MySQL", e)
