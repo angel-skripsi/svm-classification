@@ -1,5 +1,4 @@
 from mysql.connector import Error
-import mysql.connector
 import pandas as pd
 from sshtunnel import SSHTunnelForwarder
 import pymysql
@@ -59,13 +58,13 @@ try:
   cursor = conn.cursor()
   cursor.execute('DROP TABLE IF EXISTS mapping_kecamatan;')
   print('Creating table mapping_kecamatan')
-  cursor.execute("CREATE TABLE mapping_kecamatan (Id int(20) NOT NULL auto_increment,Kecamatan varchar(255),PRIMARY KEY(Id))")
+  cursor.execute("CREATE TABLE mapping_kecamatan (Id int(20) NOT NULL auto_increment, Wilayah varchar(255), Kecamatan varchar(255),PRIMARY KEY(Id))")
   cursor.execute("SET @@auto_increment_increment=1;")
   print("Table mapping_kecamatan is created")
-  cursor.execute("SELECT DISTINCT Kecamatan FROM labeling_y_raw ORDER BY 1")
+  cursor.execute("SELECT DISTINCT Wilayah, Kecamatan FROM labeling_y_raw ORDER BY 1,2")
   record = cursor.fetchall()
   for x in record:
-    sql = "INSERT INTO svmclass_classification.mapping_kecamatan (Kecamatan) VALUES (%s)"
+    sql = "INSERT INTO svmclass_classification.mapping_kecamatan (Wilayah, Kecamatan) VALUES (%s,%s)"
     cursor.execute(sql, x)
     conn.commit()
   print("Record for mapping_kecamatan inserted")
