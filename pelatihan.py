@@ -13,6 +13,7 @@ import joblib
 import warnings
 import itertools
 import os
+import base64
 
 def plot_confusion_matrix(cm,classes,normalize=False,title='Confusion Matrix',cmap=plt.cm.Blues):
   if normalize:
@@ -52,6 +53,9 @@ try:
   record_count = int(len(record)/3)
   for x in record:
     data_input = x[0]
+    data_input = data_input.replace('/', '\\')
+    data_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\dataset\\"
+    data_input = data_path+data_input
     label = x[1]
     img_array = imread(data_input)
     img_resized = resize(img_array, (100,100))
@@ -70,7 +74,11 @@ try:
   print('y_train:', y_train.shape)
   print('y_test:', y_test.shape)
   #Training kernel SVM model
-  svm_name = 'linear'
+  cursor.execute("SELECT Svm_type FROM svm_kernel;")
+  svm_record = cursor.fetchall()
+  for y in svm_record:
+    svm_type = y[0]
+  svm_name = svm_type
   classifier = SVC(kernel=svm_name).fit(X_train, y_train)
   #Predicting the testing data
   y_predict = classifier.predict(X_test)
@@ -79,14 +87,14 @@ try:
   con_matrx = confusion_matrix(y_test, y_predict)
   np.set_printoptions(precision=2)
   print('confusion_matrix:', con_matrx)
-  # Plot confusion matrix without normalization
-  plt.figure()
-  confusion_matrix_1 = plot_confusion_matrix(con_matrx, classes=["Hijau","Kering","Setengah Hijau"])
-  plt.savefig('output/confusion_matrix/confusion_matrix_without_normalization.png')
+  # # Plot confusion matrix without normalization
+  # plt.figure()
+  # confusion_matrix_1 = plot_confusion_matrix(con_matrx, classes=["Hijau","Kering","Setengah Hijau"])
+  # plt.savefig('C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\svm-classification\\output\\confusion_matrix\\confusion_matrix_without_normalization.png')
   # Plot confusion matrix with normalization
   plt.figure()
   confusion_matrix_2 = plot_confusion_matrix(con_matrx, classes=["Hijau","Kering","Setengah Hijau"], normalize=True)
-  plt.savefig('output/confusion_matrix/confusion_matrix_with_normalization.png')
+  plt.savefig('C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\svm-classification\\output\\confusion_matrix\\confusion_matrix_with_normalization.png')
   accuracy = accuracy_score(y_test, y_predict) 
   accuracy = accuracy * 100
   print('accuracy:', round(accuracy,2), '%')
@@ -112,7 +120,32 @@ try:
   print("Record for evaluation inserted")
   #Save model
   print("=======================================================================")
-  joblib.dump(classifier, "output/data_model/svm_data_model.pkl")
+  joblib.dump(classifier, "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\dataset\\output\\data_model\\svm_data_model.pkl")
   print("Model saved")
+except Error as e:
+  print("Error while connecting to MySQL", e)
+
+#Select plot data training from local repository and save base64 value to database
+count_num_2 = 0
+root_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\svm-classification\\output\\confusion_matrix"
+try:
+  tunnel = SSHTunnelForwarder(("vicenza.id.domainesia.com", 64000), ssh_password="6yqW[d9bYR;S87", ssh_username="svmclass", remote_bind_address=("localhost", 3306)) 
+  tunnel.start()
+  conn = pymysql.connect(host="127.0.0.1", user="svmclass_root", passwd="angeljelek6gt!", db = "svmclass_classification", port=tunnel.local_bind_port)
+  print("=======================================================================")
+  cursor = conn.cursor()
+  cursor.execute('DROP TABLE IF EXISTS confusion_matrix_encode;')
+  print('Creating table confusion_matrix_encode')
+  cursor.execute("CREATE TABLE confusion_matrix_encode (Id int(20) NOT NULL auto_increment, Confusion_matrix_encode longtext, PRIMARY KEY(Id))")
+  cursor.execute("SET @@auto_increment_increment=1;")
+  print("Table confusion_matrix_encode is created")
+  for row in os.listdir(root_path):
+    with open(root_path+"/"+row, "rb") as image_file:
+      cm_encode = base64.b64encode(image_file.read())
+    sql = "INSERT INTO svmclass_classification.confusion_matrix_encode (Confusion_matrix_encode) VALUES (%s)"
+    cursor.execute(sql, cm_encode)
+    conn.commit()
+    count_num_2 = count_num_2 + 1
+    print(count_num_2, "Record for confusion_matrix_encode inserted")
 except Error as e:
   print("Error while connecting to MySQL", e)
