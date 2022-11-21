@@ -7,16 +7,12 @@ from mysql.connector import Error
 from sshtunnel import SSHTunnelForwarder
 import pymysql
 import matplotlib.pyplot as plt
-import seaborn as sns
 import numpy as np
 import pandas as pd
 import joblib
 import warnings
 import itertools
-
-def appendDictToDF(df,dictToAppend):
-  df = pd.concat([df, pd.DataFrame.from_records([dictToAppend])])
-  return df
+import os
 
 def plot_confusion_matrix(cm,classes,normalize=False,title='Confusion Matrix',cmap=plt.cm.Blues):
   if normalize:
@@ -40,39 +36,8 @@ def plot_confusion_matrix(cm,classes,normalize=False,title='Confusion Matrix',cm
   plt.ylabel('true_label')
   plt.xlabel('predict_label')
 
-#Select all data from landsat_8_pelatihan and create plot for training data
-data_citra = []
-data_training = pd.DataFrame(columns=['NDVI','SAVI','EVI','Label'])
-warnings.filterwarnings('ignore')
-try:
-  tunnel = SSHTunnelForwarder(("vicenza.id.domainesia.com", 64000), ssh_password="6yqW[d9bYR;S87", ssh_username="svmclass", remote_bind_address=("localhost", 3306)) 
-  tunnel.start()
-  conn = pymysql.connect(host="127.0.0.1", user="svmclass_root", passwd="angeljelek6gt!", db = "svmclass_classification", port=tunnel.local_bind_port)
-  print("=======================================================================")
-  cursor = conn.cursor()
-  cursor.execute("SELECT NDVI, SAVI, EVI, Label FROM `landsat_8_pelatihan`")
-  record = cursor.fetchall()
-  for x in record:
-    data_citra.append(x)
-  for i in range(len(data_citra)):
-    print ("Read training data" ,i+1)
-    NDVI = data_citra[i][0]
-    SAVI = data_citra[i][1]
-    EVI = data_citra[i][2]
-    data_training = appendDictToDF(data_training,{'NDVI':NDVI,'SAVI':SAVI,'EVI':EVI,'Label':data_citra[i][3]})
-  print("Data training size:" + str(data_training.shape))  
-  #Create data training diagram
-  colours = ["green", "orange", "yellow"]
-  plot_data_train = sns.countplot(x='Label', data=data_training, palette=colours)
-  plot_data_train.bar_label(plot_data_train.containers[0])
-  plot_data_train.set(xlabel='label_tanah', ylabel='data_count', title='Plot Data Pelatihan')
-  figure_data_train = plot_data_train.get_figure()
-  figure_data_train.savefig("output/plot_pelatihan/plot_data_pelatihan.png")
-  print("Plot data training is created")
-except Error as e:
-  print("Error while connecting to MySQL", e)
-
 #Select all data from landsat_8_pelatihan and do training process and generate model
+root_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\dataset\\calculation"
 flat_data_arr = []
 target_arr = []
 warnings.filterwarnings('ignore')
@@ -82,7 +47,7 @@ try:
   conn = pymysql.connect(host="127.0.0.1", user="svmclass_root", passwd="angeljelek6gt!", db = "svmclass_classification", port=tunnel.local_bind_port)
   print("=======================================================================")
   cursor = conn.cursor()
-  cursor.execute("SELECT NDVI AS data_input, Id_label FROM landsat_8_pelatihan UNION ALL SELECT SAVI AS data_input, Id_label FROM landsat_8_pelatihan UNION ALL SELECT EVI AS data_input, Id_label FROM landsat_8_pelatihan;")
+  cursor.execute("SELECT NDVI AS data_input, Id_label FROM landsat_8_pelatihan_all WHERE NDVI IN (SELECT NDVI FROM landsat_8_pelatihan) UNION ALL SELECT SAVI AS data_input, Id_label FROM landsat_8_pelatihan_all WHERE SAVI IN (SELECT SAVI FROM landsat_8_pelatihan) UNION ALL SELECT EVI AS data_input, Id_label FROM landsat_8_pelatihan_all WHERE EVI IN (SELECT EVI FROM landsat_8_pelatihan);")
   record = cursor.fetchall()
   record_count = int(len(record)/3)
   for x in record:

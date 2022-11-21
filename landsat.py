@@ -1,8 +1,8 @@
 from PIL import Image as im
 from sshtunnel import SSHTunnelForwarder
 from mysql.connector import Error
-import pymysql
 import numpy as np
+import pymysql
 import os
 import glob
 import fnmatch
@@ -47,7 +47,7 @@ def evi_calc(b2_path, b4_path, b5_path):
     return None
 
 #Load and insert TIF and Band data to database
-root_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\dataset\\pelatihan"
+root_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\dataset\\resources"
 list_Image = []
 count_num = 0
 try:
@@ -56,20 +56,20 @@ try:
   conn = pymysql.connect(host="127.0.0.1", user="svmclass_root", passwd="angeljelek6gt!", db = "svmclass_classification", port=tunnel.local_bind_port)
   print("=======================================================================")
   cursor = conn.cursor()
-  cursor.execute('DROP TABLE IF EXISTS landsat_8_pelatihan_raw;')
-  print('Creating table landsat_8_pelatihan_raw')
-  cursor.execute("CREATE TABLE landsat_8_pelatihan_raw (Id int(20) NOT NULL auto_increment, FileName text, Wilayah varchar(255), Kecamatan varchar(255), Tahun int(4), NDVI varchar(255), SAVI varchar(255), EVI varchar(255), PRIMARY KEY(Id))")
+  cursor.execute('DROP TABLE IF EXISTS landsat_8_pelatihan_raw_all;')
+  print('Creating table landsat_8_pelatihan_raw_all')
+  cursor.execute("CREATE TABLE landsat_8_pelatihan_raw_all (Id int(20) NOT NULL auto_increment, FileName text, Wilayah varchar(255), Kecamatan varchar(255), Tahun int(4), NDVI varchar(255), SAVI varchar(255), EVI varchar(255), PRIMARY KEY(Id))")
   cursor.execute("SET @@auto_increment_increment=1;")
-  print("Table landsat_8_pelatihan_raw is created")
+  print("Table landsat_8_pelatihan_raw_all is created")
   for year in os.listdir(root_path):
-    for month in os.listdir(root_path+"\\"+year):
+    for month in os.listdir(root_path+"/"+year):
       bulan = month.split("-")[1]
-      for wilayah in os.listdir(root_path+"\\"+year+"\\"+month):
-        for kecamatan in os.listdir(root_path+"\\"+year+"\\"+month+"\\"+wilayah):
+      for wilayah in os.listdir(root_path+"/"+year+"/"+month):
+        for kecamatan in os.listdir(root_path+"/"+year+"/"+month+"/"+wilayah):
           B4_PATH = "" 
           B5_PATH = "" 
           B2_PATH = ""
-          for filename in glob.iglob(root_path+"\\"+year+"\\"+month+"\\"+wilayah+"\\"+kecamatan + "\\" + '*.tif', recursive=True):
+          for filename in glob.iglob(root_path+"/"+year+"/"+month+"/"+wilayah+"/"+kecamatan + "/" + '*.tif', recursive=True):
             if fnmatch.fnmatch (filename, '*B5*') or fnmatch.fnmatch (filename, '*TIF5*'):
               B5_PATH = filename
             elif fnmatch.fnmatch (filename, '*B4*') or fnmatch.fnmatch (filename, '*TIF4*'):
@@ -80,21 +80,27 @@ try:
           ndvi = ndvi_calc(B4_PATH, B5_PATH)
           savi = savi_calc(B4_PATH, B5_PATH)
           evi = evi_calc(B2_PATH, B4_PATH, B5_PATH)
+          ndvi = np.uint8(ndvi*255)
+          savi = np.uint8(savi*255)
+          evi = np.uint8(evi*255)
           ndvi_image = im.fromarray(ndvi)
-          ndvi_image_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\calculation\\pelatihan\\ndvi\\"+year+"_"+month+"_"+wilayah+"_"+kecamatan+".tif"
+          ndvi_image_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\dataset\\output\\calculation\\pelatihan\\ndvi\\"+year+"_"+month+"_"+wilayah+"_"+kecamatan+".tif"
           ndvi_path = ndvi_image.save(ndvi_image_path, "TIFF")
+          ndvi_image_path_save = "output/calculation/pelatihan/ndvi/"+year+"_"+month+"_"+wilayah+"_"+kecamatan+".tif"
           savi_image = im.fromarray(savi)
-          savi_image_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\calculation\\pelatihan\\savi\\"+year+"_"+month+"_"+wilayah+"_"+kecamatan+".tif"
+          savi_image_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\dataset\\output\\calculation\\pelatihan\\savi\\"+year+"_"+month+"_"+wilayah+"_"+kecamatan+".tif"
           savi_path = savi_image.save(savi_image_path, "TIFF")
+          savi_image_path_save = "output/calculation/pelatihan/savi/"+year+"_"+month+"_"+wilayah+"_"+kecamatan+".tif"
           evi_image = im.fromarray(evi)
-          evi_image_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\calculation\\pelatihan\\evi\\"+year+"_"+month+"_"+wilayah+"_"+kecamatan+".tif"
-          evi_path = evi_image.save(evi_image_path, "TIFF")    
-          sql = "INSERT INTO svmclass_classification.landsat_8_pelatihan_raw (FileName, Wilayah, Kecamatan, Tahun, NDVI, SAVI, EVI) VALUES (%s,%s,%s,%s,%s,%s,%s)"
-          val = (B2_PATH+";"+B4_PATH+";"+B5_PATH, wilayah, kecamatan, year, ndvi_image_path, savi_image_path, evi_image_path)
+          evi_image_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\dataset\\output\\calculation\\pelatihan\\evi\\"+year+"_"+month+"_"+wilayah+"_"+kecamatan+".tif"
+          evi_path = evi_image.save(evi_image_path, "TIFF")
+          evi_image_path_save = "output/calculation/pelatihan/evi/"+year+"_"+month+"_"+wilayah+"_"+kecamatan+".tif"
+          sql = "INSERT INTO svmclass_classification.landsat_8_pelatihan_raw_all (FileName, Wilayah, Kecamatan, Tahun, NDVI, SAVI, EVI) VALUES (%s,%s,%s,%s,%s,%s,%s)"
+          val = (B2_PATH+";"+B4_PATH+";"+B5_PATH, wilayah, kecamatan, year, ndvi_image_path_save, savi_image_path_save, evi_image_path_save)
           cursor.execute(sql, val)
           conn.commit()
           count_num = count_num + 1
-          print(count_num, "Record for landsat_8_pelatihan_raw inserted")
+          print(count_num, "Record for landsat_8_pelatihan_raw_all inserted")
 except Error as e:
   print("Failed inserting data into MySQL table {}".format(e))
 
@@ -106,18 +112,18 @@ try:
   conn = pymysql.connect(host="127.0.0.1", user="svmclass_root", passwd="angeljelek6gt!", db = "svmclass_classification", port=tunnel.local_bind_port)
   print("=======================================================================")
   cursor = conn.cursor()
-  cursor.execute('DROP TABLE IF EXISTS landsat_8_pelatihan;')
-  print('Creating table landsat_8_pelatihan')
-  cursor.execute("CREATE TABLE landsat_8_pelatihan (Id int(20), Filename text, Id_wilayah int(20), Wilayah varchar(255), Id_kecamatan int(20), Kecamatan varchar(255), Tahun int(4), NDVI varchar(255), SAVI varchar(255), EVI varchar(255), Id_label int(20), Label varchar(255), PRIMARY KEY(Id))")
+  cursor.execute('DROP TABLE IF EXISTS landsat_8_pelatihan_all;')
+  print('Creating table landsat_8_pelatihan_all')
+  cursor.execute("CREATE TABLE landsat_8_pelatihan_all (Id int(20), Filename text, Id_wilayah int(20), Wilayah varchar(255), Id_kecamatan int(20), Kecamatan varchar(255), Tahun int(4), NDVI varchar(255), SAVI varchar(255), EVI varchar(255), Id_label int(20), Label varchar(255), PRIMARY KEY(Id))")
   cursor.execute("SET @@auto_increment_increment=1;")
-  print("Table landsat_8_pelatihan is created")
-  cursor.execute("SELECT a.Id, a.FileName, b.Id AS Id_wilayah, a.Wilayah, c.id AS Id_kecamatan, a.Kecamatan, a.Tahun, a.NDVI, a.SAVI, a.EVI, e.Id_label, e.Label FROM `landsat_8_pelatihan_raw` AS a LEFT JOIN `mapping_wilayah` AS b ON a.Wilayah = b.Wilayah LEFT JOIN `mapping_kecamatan` AS c ON a.Kecamatan = c.Kecamatan LEFT JOIN `labeling_y` AS e ON a.Wilayah = e.Wilayah AND a.Kecamatan = e.Kecamatan AND a.Tahun = e.Tahun ORDER BY 1")
+  print("Table landsat_8_pelatihan_all is created")
+  cursor.execute("SELECT a.Id, a.FileName, b.Id AS Id_wilayah, a.Wilayah, c.id AS Id_kecamatan, a.Kecamatan, a.Tahun, a.NDVI, a.SAVI, a.EVI, e.Id_label, e.Label FROM `landsat_8_pelatihan_raw_all` AS a LEFT JOIN `mapping_wilayah` AS b ON a.Wilayah = b.Wilayah LEFT JOIN `mapping_kecamatan` AS c ON a.Kecamatan = c.Kecamatan LEFT JOIN `labeling_y` AS e ON a.Wilayah = e.Wilayah AND a.Kecamatan = e.Kecamatan AND a.Tahun = e.Tahun ORDER BY 1")
   record = cursor.fetchall()
   for x in record:
-    sql = "INSERT INTO svmclass_classification.landsat_8_pelatihan (Id, Filename, Id_wilayah, Wilayah, Id_kecamatan, Kecamatan, Tahun, NDVI, SAVI, EVI, Id_label, Label) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+    sql = "INSERT INTO svmclass_classification.landsat_8_pelatihan_all (Id, Filename, Id_wilayah, Wilayah, Id_kecamatan, Kecamatan, Tahun, NDVI, SAVI, EVI, Id_label, Label) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
     cursor.execute(sql, x)
     conn.commit()
     count_num_3 = count_num_3 + 1
-    print(count_num_3, "Record for landsat_8_pelatihan inserted")
+    print(count_num_3, "Record for landsat_8_pelatihan_all inserted")
 except Error as e:
   print("Error while connecting to MySQL", e)
