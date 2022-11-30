@@ -56,11 +56,11 @@ try:
   conn = pymysql.connect(host="127.0.0.1", user="svmclass_root", passwd="angeljelek6gt!", db = "svmclass_classification", port=tunnel.local_bind_port)
   print("=======================================================================")
   cursor = conn.cursor()
-  cursor.execute('DROP TABLE IF EXISTS landsat_8_pelatihan_raw_all;')
-  print('Creating table landsat_8_pelatihan_raw_all')
-  cursor.execute("CREATE TABLE landsat_8_pelatihan_raw_all (Id int(20) NOT NULL auto_increment, FileName text, Wilayah varchar(255), Kecamatan varchar(255), Tahun int(4), NDVI varchar(255), SAVI varchar(255), EVI varchar(255), PRIMARY KEY(Id))")
+  cursor.execute('DROP TABLE IF EXISTS landsat_8_all_pelatihan;')
+  print('Creating table landsat_8_all_pelatihan')
+  cursor.execute("CREATE TABLE landsat_8_all_pelatihan (Id int(20) NOT NULL auto_increment, FileName text, Wilayah varchar(255), Kecamatan varchar(255), Tahun int(4), NDVI varchar(255), SAVI varchar(255), EVI varchar(255), Id_label int(20), Label varchar(255), PRIMARY KEY(Id))")
   cursor.execute("SET @@auto_increment_increment=1;")
-  print("Table landsat_8_pelatihan_raw_all is created")
+  print("Table landsat_8_all_pelatihan is created")
   for year in os.listdir(root_path):
     for month in os.listdir(root_path+"/"+year):
       bulan = month.split("-")[1]
@@ -95,16 +95,16 @@ try:
           evi_image_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\dataset\\output\\calculation\\pelatihan\\evi\\"+year+"_"+month+"_"+wilayah+"_"+kecamatan+".tif"
           evi_path = evi_image.save(evi_image_path, "TIFF")
           evi_image_path_save = "output/calculation/pelatihan/evi/"+year+"_"+month+"_"+wilayah+"_"+kecamatan+".tif"
-          sql = "INSERT INTO svmclass_classification.landsat_8_pelatihan_raw_all (FileName, Wilayah, Kecamatan, Tahun, NDVI, SAVI, EVI) VALUES (%s,%s,%s,%s,%s,%s,%s)"
+          sql = "INSERT INTO svmclass_classification.landsat_8_all_pelatihan (FileName, Wilayah, Kecamatan, Tahun, NDVI, SAVI, EVI) VALUES (%s,%s,%s,%s,%s,%s,%s)"
           val = (B2_PATH+";"+B4_PATH+";"+B5_PATH, wilayah, kecamatan, year, ndvi_image_path_save, savi_image_path_save, evi_image_path_save)
           cursor.execute(sql, val)
           conn.commit()
           count_num = count_num + 1
-          print(count_num, "Record for landsat_8_pelatihan_raw_all inserted")
+          print(count_num, "Record for landsat_8_all_pelatihan inserted")
 except Error as e:
   print("Failed inserting data into MySQL table {}".format(e))
 
-#Select all data from landsat_8_pelatihan_raw and mapping it to Id and save it to database
+#Select all data from landsat_8_all_pelatihan and mapping it to Label and save it to database
 count_num_3 = 0
 try:
   tunnel = SSHTunnelForwarder(("vicenza.id.domainesia.com", 64000), ssh_password="6yqW[d9bYR;S87", ssh_username="svmclass", remote_bind_address=("localhost", 3306)) 
@@ -112,18 +112,8 @@ try:
   conn = pymysql.connect(host="127.0.0.1", user="svmclass_root", passwd="angeljelek6gt!", db = "svmclass_classification", port=tunnel.local_bind_port)
   print("=======================================================================")
   cursor = conn.cursor()
-  cursor.execute('DROP TABLE IF EXISTS landsat_8_pelatihan_all;')
-  print('Creating table landsat_8_pelatihan_all')
-  cursor.execute("CREATE TABLE landsat_8_pelatihan_all (Id int(20), Filename text, Id_wilayah int(20), Wilayah varchar(255), Id_kecamatan int(20), Kecamatan varchar(255), Tahun int(4), NDVI varchar(255), SAVI varchar(255), EVI varchar(255), Id_label int(20), Label varchar(255), PRIMARY KEY(Id))")
-  cursor.execute("SET @@auto_increment_increment=1;")
-  print("Table landsat_8_pelatihan_all is created")
-  cursor.execute("SELECT a.Id, a.FileName, b.Id AS Id_wilayah, a.Wilayah, c.id AS Id_kecamatan, a.Kecamatan, a.Tahun, a.NDVI, a.SAVI, a.EVI, e.Id_label, e.Label FROM `landsat_8_pelatihan_raw_all` AS a LEFT JOIN `mapping_wilayah` AS b ON a.Wilayah = b.Wilayah LEFT JOIN `mapping_kecamatan` AS c ON a.Kecamatan = c.Kecamatan LEFT JOIN `labeling_y` AS e ON a.Wilayah = e.Wilayah AND a.Kecamatan = e.Kecamatan AND a.Tahun = e.Tahun ORDER BY 1")
-  record = cursor.fetchall()
-  for x in record:
-    sql = "INSERT INTO svmclass_classification.landsat_8_pelatihan_all (Id, Filename, Id_wilayah, Wilayah, Id_kecamatan, Kecamatan, Tahun, NDVI, SAVI, EVI, Id_label, Label) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-    cursor.execute(sql, x)
-    conn.commit()
-    count_num_3 = count_num_3 + 1
-    print(count_num_3, "Record for landsat_8_pelatihan_all inserted")
+  cursor.execute("UPDATE svmclass_classification.landsat_8_all_pelatihan SET Id_Label = (SELECT Id_label FROM labeling_y WHERE landsat_8_all_pelatihan.Wilayah = labeling_y.Wilayah AND landsat_8_all_pelatihan.Kecamatan = labeling_y.Kecamatan AND landsat_8_all_pelatihan.Tahun = labeling_y.Tahun), Label = (SELECT Label FROM labeling_y WHERE landsat_8_all_pelatihan.Wilayah = labeling_y.Wilayah AND landsat_8_all_pelatihan.Kecamatan = labeling_y.Kecamatan AND landsat_8_all_pelatihan.Tahun = labeling_y.Tahun) WHERE Id > 0")
+  conn.commit()
+  print("Record for landsat_8_all_pelatihan updated")
 except Error as e:
   print("Error while connecting to MySQL", e)
