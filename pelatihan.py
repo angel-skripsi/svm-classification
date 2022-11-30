@@ -48,7 +48,7 @@ try:
   conn = pymysql.connect(host="127.0.0.1", user="svmclass_root", passwd="angeljelek6gt!", db = "svmclass_classification", port=tunnel.local_bind_port)
   print("=======================================================================")
   cursor = conn.cursor()
-  cursor.execute("SELECT NDVI AS data_input, Id_label FROM landsat_8_pelatihan_all WHERE NDVI IN (SELECT NDVI FROM landsat_8_pelatihan) UNION ALL SELECT SAVI AS data_input, Id_label FROM landsat_8_pelatihan_all WHERE SAVI IN (SELECT SAVI FROM landsat_8_pelatihan) UNION ALL SELECT EVI AS data_input, Id_label FROM landsat_8_pelatihan_all WHERE EVI IN (SELECT EVI FROM landsat_8_pelatihan);")
+  cursor.execute("SELECT NDVI AS data_input, Id_label FROM landsat_8_all_pelatihan WHERE NDVI IN (SELECT NDVI FROM landsat_8_pelatihan) UNION ALL SELECT SAVI AS data_input, Id_label FROM landsat_8_all_pelatihan WHERE SAVI IN (SELECT SAVI FROM landsat_8_pelatihan) UNION ALL SELECT EVI AS data_input, Id_label FROM landsat_8_all_pelatihan WHERE EVI IN (SELECT EVI FROM landsat_8_pelatihan);")
   record = cursor.fetchall()
   record_count = int(len(record)/3)
   for x in record:
@@ -113,8 +113,8 @@ try:
   score_4 = str("%.2f" % (classification['macro avg']['f1-score']*100))
   print('classification:', classification)
   print("=======================================================================")
-  sql = "INSERT INTO svmclass_classification.evaluation (Svm_type, Data_count, Hijau_precision, Hijau_recall, Hijau_f1_score, Kering_precision, Kering_recall, Kering_f1_score, Setengah_hijau_precision, Setengah_hijau_recall, Setengah_hijau_f1_score, macro_avg_precision, macro_avg_recall, macro_avg_f1_score) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-  x = svm_name, record_count, prec_1, rec_1, score_1, prec_2, rec_2, score_2, prec_3, rec_3, score_3, prec_4, rec_4, score_4
+  sql = "INSERT INTO svmclass_classification.evaluation (Svm_type, Data_count, Hijau_precision, Hijau_recall, Hijau_f1_score, Kering_precision, Kering_recall, Kering_f1_score, Setengah_hijau_precision, Setengah_hijau_recall, Setengah_hijau_f1_score, macro_avg_precision, macro_avg_recall, macro_avg_f1_score, accuracy) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+  x = svm_name, record_count, prec_1, rec_1, score_1, prec_2, rec_2, score_2, prec_3, rec_3, score_3, prec_4, rec_4, score_4, round(accuracy,2)
   cursor.execute(sql, x)
   conn.commit()
   print("Record for evaluation inserted")
@@ -134,18 +134,15 @@ try:
   conn = pymysql.connect(host="127.0.0.1", user="svmclass_root", passwd="angeljelek6gt!", db = "svmclass_classification", port=tunnel.local_bind_port)
   print("=======================================================================")
   cursor = conn.cursor()
-  cursor.execute('DROP TABLE IF EXISTS confusion_matrix_encode;')
-  print('Creating table confusion_matrix_encode')
-  cursor.execute("CREATE TABLE confusion_matrix_encode (Id int(20) NOT NULL auto_increment, Confusion_matrix_encode longtext, PRIMARY KEY(Id))")
-  cursor.execute("SET @@auto_increment_increment=1;")
-  print("Table confusion_matrix_encode is created")
+  cursor.execute('DELETE FROM svmclass_classification.image_encode WHERE entity_name = "confusion_matrix";')
   for row in os.listdir(root_path):
     with open(root_path+"/"+row, "rb") as image_file:
       cm_encode = base64.b64encode(image_file.read())
-    sql = "INSERT INTO svmclass_classification.confusion_matrix_encode (Confusion_matrix_encode) VALUES (%s)"
-    cursor.execute(sql, cm_encode)
+    sql = "INSERT INTO svmclass_classification.image_encode (entity_name, encode_value) VALUES (%s, %s)"
+    val = ("confusion_matrix", cm_encode)
+    cursor.execute(sql, val)
     conn.commit()
     count_num_2 = count_num_2 + 1
-    print(count_num_2, "Record for confusion_matrix_encode inserted")
+    print(count_num_2, "Record for image_encode inserted")
 except Error as e:
   print("Error while connecting to MySQL", e)
