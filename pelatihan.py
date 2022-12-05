@@ -39,7 +39,10 @@ def plot_confusion_matrix(cm,classes,normalize=False,title='Confusion Matrix',cm
 
 #Select all data from landsat_8_pelatihan and do training process and generate model
 root_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\dataset\\calculation"
-flat_data_arr = []
+data_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\dataset\\"
+ndvi_flat_data_arr = []
+savi_flat_data_arr = []
+evi_flat_data_arr = []
 target_arr = []
 warnings.filterwarnings('ignore')
 try:
@@ -48,23 +51,46 @@ try:
   conn = pymysql.connect(host="127.0.0.1", user="svmclass_root", passwd="angeljelek6gt!", db = "svmclass_classification", port=tunnel.local_bind_port)
   print("=======================================================================")
   cursor = conn.cursor()
-  cursor.execute("SELECT NDVI AS data_input, Id_label FROM landsat_8_all_pelatihan WHERE NDVI IN (SELECT NDVI FROM landsat_8_pelatihan) UNION ALL SELECT SAVI AS data_input, Id_label FROM landsat_8_all_pelatihan WHERE SAVI IN (SELECT SAVI FROM landsat_8_pelatihan) UNION ALL SELECT EVI AS data_input, Id_label FROM landsat_8_all_pelatihan WHERE EVI IN (SELECT EVI FROM landsat_8_pelatihan);")
+  cursor.execute("SELECT NDVI, SAVI, EVI, Id_label FROM landsat_8_all_pelatihan;")
   record = cursor.fetchall()
   record_count = int(len(record)/3)
   for x in record:
-    data_input = x[0]
-    data_input = data_input.replace('/', '\\')
-    data_path = "C:\\Users\\Angellina\\Dropbox\\My PC (LAPTOP-9GTQMRFV)\\Desktop\\ALL SKRIPSI\\GITHUB\\dataset\\"
-    data_input = data_path+data_input
-    label = x[1]
-    img_array = imread(data_input)
-    img_resized = resize(img_array, (100,100))
-    flat_data_arr.append(img_resized.flatten())
-    target_arr.append(label)
-  flat_data = np.array(flat_data_arr)
+    ndvi_data_input = x[0]
+    ndvi_data_input = ndvi_data_input.replace('/', '\\')
+    ndvi_data_input = data_path+ndvi_data_input
+    ndvi_img_array = imread(ndvi_data_input)
+    ndvi_img_resized = resize(ndvi_img_array, (100,100))
+    ndvi_img_flatten = ndvi_img_resized.flatten()
+    ndvi_img_tolist = ndvi_img_flatten.tolist()
+    ndvi_flat_data_arr.extend(ndvi_img_tolist)
+    savi_data_input = x[1]
+    savi_data_input = savi_data_input.replace('/', '\\')
+    savi_data_input = data_path+savi_data_input
+    savi_img_array = imread(savi_data_input)
+    savi_img_resized = resize(savi_img_array, (100,100))
+    savi_img_flatten = savi_img_resized.flatten()
+    savi_img_tolist = savi_img_flatten.tolist()
+    savi_flat_data_arr.extend(savi_img_tolist)
+    evi_data_input = x[2]
+    evi_data_input = evi_data_input.replace('/', '\\')
+    evi_data_input = data_path+evi_data_input
+    evi_img_array = imread(evi_data_input)
+    evi_img_resized = resize(evi_img_array, (100,100))
+    evi_img_flatten = evi_img_resized.flatten()
+    evi_img_tolist = evi_img_flatten.tolist()
+    evi_flat_data_arr.extend(evi_img_tolist)
+    label = x[3]
+    for i in range(10000):
+      target_arr.append(label)
+  ndvi_flat_data = np.array(ndvi_flat_data_arr)
+  savi_flat_data = np.array(savi_flat_data_arr)
+  evi_flat_data = np.array(evi_flat_data_arr)
   target = np.array(target_arr)
-  df = pd.DataFrame(flat_data)
-  df['Target'] = target
+  df = pd.DataFrame(ndvi_flat_data)
+  df['SAVI'] = savi_flat_data
+  df['EVI'] = evi_flat_data
+  df['target'] = target
+  df.columns =['NDVI', 'SAVI', 'EVI', 'Label']
   #Split training and testing data
   X = df.iloc[:,:-1]
   y = df.iloc[:,-1]
